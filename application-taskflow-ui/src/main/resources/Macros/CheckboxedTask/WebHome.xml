@@ -1,22 +1,39 @@
-<?xml version='1.1' encoding='UTF-8'?>
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
 <xwikidoc version="1.5" reference="Macros.CheckboxedTask.WebHome" locale="">
   <web>Macros.CheckboxedTask</web>
   <name>WebHome</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
-  <creator>xwiki:XWiki.mittelba</creator>
-  <creationDate>1671560843000</creationDate>
+  <creator>xwiki:XWiki.Admin</creator>
   <parent>Macros.WebHome</parent>
-  <author>xwiki:XWiki.mittelba</author>
-  <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
-  <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
-  <date>1673039862000</date>
-  <contentUpdateDate>1673039840000</contentUpdateDate>
-  <version>3.3</version>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
   <title>CheckboxedTask</title>
-  <comment>Aufgabe new (no RID) erledigt</comment>
-  <minorEdit>true</minorEdit>
+  <comment/>
+  <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
   <content>This macro adds a checkboxed **task with checkbox** macro and an event listener for ticking completed tasks off using the checkboxes
@@ -29,7 +46,7 @@ Description of task to be done
 
 **CKEditor:**
 
-In order to make best use of it, add the following CKeditor configuration to your editor through the [[dedicated "WYSIWYG Editor" section>>url:https://extensions.xwiki.org/xwiki/bin/view/Extension/CKEditor%20Integration/#HAdministrationSection]] in the [[Wiki Administration>>url:https://extensions.xwiki.org/xwiki/bin/view/Extension/Administration%20Application]]:
+In order to make best use of it, add the following CKeditor configuration to your editor through the [[dedicated "WYSIWYG Editor" section&gt;&gt;url:https://extensions.xwiki.org/xwiki/bin/view/Extension/CKEditor%20Integration/#HAdministrationSection]] in the [[Wiki Administration&gt;&gt;url:https://extensions.xwiki.org/xwiki/bin/view/Extension/Administration%20Application]]:
 
 {{code language="javascript" layout="LINENUMBERS"}}
 config['xwiki-macro'] = config['xwiki-macro'] || {};
@@ -46,13 +63,13 @@ config['xwiki-macro'].insertButtons = [
 
 **Macros and components:** 
 
-* [[CheckboxedTask>>CheckboxedTask]]: Contains the **checktask **macro that inserts checkboxed tasks in pages and a JavaScript listener that listens for checking/unchecking events
-* [[CheckboxedTaskListener>>doc:.CheckboxedTaskListener.WebHome]]: Event listener that listens for creating and updating tasks on pages, adding xobjects to the respective pages
-* [[CheckboxUpdater>>doc:CheckboxUpdater]]: Is called by the JavaScript listener to update the xobject of a task when checked or unchecked
-* [[Task Class>>doc:TaskClass]]:  Xobject class that defines the properties of tasks to be saved 
-* [[CheckboxedTaskReport>>doc:.CheckboxedTaskReport.WebHome]]: Contains the macro **reportchecktasks **that inserts a task report in pages using the default **live data** macro. Also contains another JavaScript listener listening for cheking/unchecking events within the live data table.
-* [[TasksJSON>>doc:TasksJSON]]: Defines the database query and formats the input for the live data macro in  the task report
-* [[CheckboxedTaskTranslations>>doc:.CheckboxedTaskTranslations.WebHome||style="outline-width: 0px !important; user-select: auto !important;"]]: Contains the localized labes of the task and task report macros</content>
+* [[CheckboxedTask&gt;&gt;CheckboxedTask]]: Contains the **checktask **macro that inserts checkboxed tasks in pages and a JavaScript listener that listens for checking/unchecking events
+* [[CheckboxedTaskListener&gt;&gt;doc:.CheckboxedTaskListener.WebHome]]: Event listener that listens for creating and updating tasks on pages, adding xobjects to the respective pages
+* [[CheckboxUpdater&gt;&gt;doc:CheckboxUpdater]]: Is called by the JavaScript listener to update the xobject of a task when checked or unchecked
+* [[Task Class&gt;&gt;doc:TaskClass]]:  Xobject class that defines the properties of tasks to be saved 
+* [[CheckboxedTaskReport&gt;&gt;doc:.CheckboxedTaskReport.WebHome]]: Contains the macro **reportchecktasks **that inserts a task report in pages using the default **live data** macro. Also contains another JavaScript listener listening for cheking/unchecking events within the live data table.
+* [[TasksJSON&gt;&gt;doc:TasksJSON]]: Defines the database query and formats the input for the live data macro in  the task report
+* [[CheckboxedTaskTranslations&gt;&gt;doc:.CheckboxedTaskTranslations.WebHome||style="outline-width: 0px !important; user-select: auto !important;"]]: Contains the localized labes of the task and task report macros</content>
   <object>
     <name>Macros.CheckboxedTask.WebHome</name>
     <number>0</number>
@@ -175,7 +192,7 @@ require(['jquery'], function ($) {
     //console.log(Url);
     var notification = new XWiki.widgets.Notification("$progress ...", 'inprogress');
     $.post(Url, UrlParams, function( response, status, xhr ) {
-      notification.replace(new XWiki.widgets.Notification("$success1 &lt;b>"+ response.task + "&lt;/b> &lt;i>" + response.result + "&lt;/i> $success2",'done'));
+      notification.replace(new XWiki.widgets.Notification("$success1 &lt;b&gt;"+ response.task + "&lt;/b&gt; &lt;i&gt;" + response.result + "&lt;/i&gt; $success2",'done'));
      if ( status == "error" ) {
        var msg = "$error: ";
        notification.replace(new XWiki.widgets.Notification(msg + xhr.status + " " + xhr.statusText,'error'));
@@ -443,7 +460,7 @@ td[data-title=🗹]{
       <cache>long</cache>
     </property>
     <property>
-      <code>a.cke_button.cke_button__xwiki-macro-task > span.cke_button_icon.cke_button__xwiki-macro-checktask_icon {
+      <code>a.cke_button.cke_button__xwiki-macro-task &gt; span.cke_button_icon.cke_button__xwiki-macro-checktask_icon {
   font-family: 'Glyphicons Halflings';
   position: relative;
   top: 1px;
@@ -739,14 +756,14 @@ td[data-title=🗹]{
 #if($wikimacro.content)
   #set($task = $wikimacro.content)
 #end
-&lt;span id="span-${taskCounter}" class="checktask-span">&lt;input class="checktask-checkbox" id="$rid" type="checkbox" name="checktask" data-page="${doc.fullName}" value="${rid}"#if($done == 1) title="$services.localization.render('reportchecktasks.macro.tooltip1')" checked#else title="$services.localization.render('reportchecktasks.macro.tooltip0')"#end disabled/>&lt;label for="$rid" class="checktask-label" #if($done == 1) title="$services.localization.render('reportchecktasks.macro.tooltip1')" #else title="$services.localization.render('reportchecktasks.macro.tooltip0')"#end>#if(($dueDate &amp;&amp; $dueDate!="") || ($responsible &amp;&amp; $responsible!=""))$task &lt;span>($services.localization.render('checktask.macro.toDo')#if($dueDate &amp;&amp; $dueDate!="") $services.localization.render('checktask.macro.byWhen') $dueDate#end#if($responsible &amp;&amp; $responsible!="") $services.localization.render('checktask.macro.byWho') {{mention reference="$responsible"/}}#end)&lt;/span>#else $task #end&lt;/label>&lt;/span> ##**Debug: $responsible; $dueDate; $done**
+&lt;span id="span-${taskCounter}" class="checktask-span"&gt;&lt;input class="checktask-checkbox" id="$rid" type="checkbox" name="checktask" data-page="${doc.fullName}" value="${rid}"#if($done == 1) title="$services.localization.render('reportchecktasks.macro.tooltip1')" checked#else title="$services.localization.render('reportchecktasks.macro.tooltip0')"#end disabled/&gt;&lt;label for="$rid" class="checktask-label" #if($done == 1) title="$services.localization.render('reportchecktasks.macro.tooltip1')" #else title="$services.localization.render('reportchecktasks.macro.tooltip0')"#end&gt;#if(($dueDate &amp;&amp; $dueDate!="") || ($responsible &amp;&amp; $responsible!=""))$task &lt;span&gt;($services.localization.render('checktask.macro.toDo')#if($dueDate &amp;&amp; $dueDate!="") $services.localization.render('checktask.macro.byWhen') $dueDate#end#if($responsible &amp;&amp; $responsible!="") $services.localization.render('checktask.macro.byWho') {{mention reference="$responsible"/}}#end)&lt;/span&gt;#else $task #end&lt;/label&gt;&lt;/span&gt; ##**Debug: $responsible; $dueDate; $done**
 {{/html}}
 {{/velocity}}
 
 </code>
     </property>
     <property>
-      <contentDescription></contentDescription>
+      <contentDescription/>
     </property>
     <property>
       <contentJavaType>Wiki</contentJavaType>
@@ -845,10 +862,10 @@ td[data-title=🗹]{
       </type>
     </class>
     <property>
-      <defaultValue></defaultValue>
+      <defaultValue/>
     </property>
     <property>
-      <description></description>
+      <description/>
     </property>
     <property>
       <mandatory/>
@@ -924,10 +941,10 @@ td[data-title=🗹]{
       </type>
     </class>
     <property>
-      <defaultValue></defaultValue>
+      <defaultValue/>
     </property>
     <property>
-      <description></description>
+      <description/>
     </property>
     <property>
       <mandatory/>
@@ -1003,7 +1020,7 @@ td[data-title=🗹]{
       </type>
     </class>
     <property>
-      <defaultValue></defaultValue>
+      <defaultValue/>
     </property>
     <property>
       <description>Randomized ID sequence for task identification. This is generated automatically. Avoid setting it and do not change!</description>
@@ -1015,7 +1032,7 @@ td[data-title=🗹]{
       <name>rid</name>
     </property>
     <property>
-      <type></type>
+      <type/>
     </property>
   </object>
 </xwikidoc>

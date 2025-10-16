@@ -1,25 +1,42 @@
-<?xml version='1.1' encoding='UTF-8'?>
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
 <xwikidoc version="1.5" reference="Macros.CheckboxedTask.CheckboxedTaskReport.WebHome" locale="">
   <web>Macros.CheckboxedTask.CheckboxedTaskReport</web>
   <name>WebHome</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
-  <creator>xwiki:XWiki.mittelba</creator>
-  <creationDate>1671560843000</creationDate>
+  <creator>xwiki:XWiki.Admin</creator>
   <parent>Macros.CheckboxedTask.WebHome</parent>
-  <author>xwiki:XWiki.mittelba</author>
-  <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
-  <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
-  <date>1673113430000</date>
-  <contentUpdateDate>1671713063000</contentUpdateDate>
-  <version>3.18</version>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
   <title>CheckboxedTaskReport</title>
   <comment/>
-  <minorEdit>true</minorEdit>
+  <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
-  <content>This is the **task report** macro. It collects task by user, completion status or page space in a sortable tick-off list. It is based on the [[live data macro>>https://extensions.xwiki.org/xwiki/bin/view/Extension/Live%20Data%20Macro/]].</content>
+  <content>This is the **task report** macro. It collects task by user, completion status or page space in a sortable tick-off list. It is based on the [[live data macro&gt;&gt;https://extensions.xwiki.org/xwiki/bin/view/Extension/Live%20Data%20Macro/]].</content>
   <object>
     <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
     <number>0</number>
@@ -146,7 +163,7 @@ require(['jquery'], function ($) {
     //console.log(Url);
     var notification =new XWiki.widgets.Notification("$progress ...", 'inprogress');
     $.post(Url, UrlParams, function( response, status, xhr ) {
-      notification.replace(new XWiki.widgets.Notification("$success1 &lt;b>"+ response.task + "&lt;/b> als &lt;i>" + response.result + "&lt;/i> $success2",'done'));
+      notification.replace(new XWiki.widgets.Notification("$success1 &lt;b&gt;"+ response.task + "&lt;/b&gt; als &lt;i&gt;" + response.result + "&lt;/i&gt; $success2",'done'));
      if ( status == "error" ) {
        var msg = "$error: ";
        notification.replace(new XWiki.widgets.Notification(msg + xhr.status + " " + xhr.statusText,'error'));
@@ -445,15 +462,15 @@ require(['jquery'], function ($) {
       #else
          #set($sourceParams = "$sourceParams&amp;page=$xwiki.getDocument($page)")
       #end
-      #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report4') $services.localization.render('reportchecktasks.macro.report5') [[$xwiki.getDocument($page).title>>$page]]")
+      #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report4') $services.localization.render('reportchecktasks.macro.report5') [[$xwiki.getDocument($page).title&gt;&gt;$page]]")
     #end
     #if($xcontext.macro.params.project)
       #set($project = "$!xcontext.macro.params.project")
       #set($sourceParams = "$sourceParams&amp;project=$xwiki.getDocument($project)")
       #if(!$xcontext.macro.params.page) 
-        #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report4') $services.localization.render('reportchecktasks.macro.report7') [[$xwiki.getDocument($project).title>>$project]]===")
+        #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report4') $services.localization.render('reportchecktasks.macro.report7') [[$xwiki.getDocument($project).title&gt;&gt;$project]]===")
       #else
-        #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report6') $services.localization.render('reportchecktasks.macro.report7') [[$xwiki.getDocument($project).title>>$project]]===")
+        #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report6') $services.localization.render('reportchecktasks.macro.report7') [[$xwiki.getDocument($project).title&gt;&gt;$project]]===")
       #end
     #end
   #else 
@@ -527,10 +544,10 @@ require(['jquery'], function ($) {
 {{/velocity}}</code>
     </property>
     <property>
-      <contentDescription></contentDescription>
+      <contentDescription/>
     </property>
     <property>
-      <contentJavaType></contentJavaType>
+      <contentJavaType/>
     </property>
     <property>
       <contentType>No content</contentType>
@@ -626,7 +643,7 @@ require(['jquery'], function ($) {
       </type>
     </class>
     <property>
-      <defaultValue></defaultValue>
+      <defaultValue/>
     </property>
     <property>
       <description>Show the tasks of this user:</description>
@@ -705,7 +722,7 @@ require(['jquery'], function ($) {
       </type>
     </class>
     <property>
-      <defaultValue></defaultValue>
+      <defaultValue/>
     </property>
     <property>
       <description>Show tasks from this page and its subpages:</description>
@@ -784,7 +801,7 @@ require(['jquery'], function ($) {
       </type>
     </class>
     <property>
-      <defaultValue></defaultValue>
+      <defaultValue/>
     </property>
     <property>
       <description>Set this to 0 for unfinished tasks or to 1 for finished tasks. If you want to see both unfisnished and finished tasks in your report, set this to 2. This setting defaults to 0.</description>
@@ -796,7 +813,7 @@ require(['jquery'], function ($) {
       <name>done</name>
     </property>
     <property>
-      <type></type>
+      <type/>
     </property>
   </object>
 </xwikidoc>

@@ -1,22 +1,39 @@
-<?xml version='1.1' encoding='UTF-8'?>
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
 <xwikidoc version="1.5" reference="Macros.CheckboxedTask.TasksJSON" locale="">
   <web>Macros.CheckboxedTask</web>
   <name>TasksJSON</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
-  <creator>xwiki:XWiki.mittelba</creator>
-  <creationDate>1671560843000</creationDate>
+  <creator>xwiki:XWiki.Admin</creator>
   <parent>WebHome</parent>
-  <author>xwiki:XWiki.mittelba</author>
-  <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
-  <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
-  <date>1673110480000</date>
-  <contentUpdateDate>1673110447000</contentUpdateDate>
-  <version>4.3</version>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
   <title>TasksJSON</title>
   <comment/>
-  <minorEdit>true</minorEdit>
+  <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
   <content>{{velocity wiki="false"}}
@@ -156,10 +173,10 @@
   #set($dueDate = $item[4])
 #end
 #set($checkbox = $escapetool.javascript("&lt;input name='checktask' type='checkbox' class='checktask-checkbox' data-page='$item[0]' value='$item[2]'"))
-#if($item[1]==1)#set($action = "${checkbox} title='${services.localization.render('reportchecktasks.macro.tooltip1')}' checked disabled/>")#else #set($action = "${checkbox} title='${services.localization.render('reportchecktasks.macro.tooltip0')}' disabled/>")#end
+#if($item[1]==1)#set($action = "${checkbox} title='${services.localization.render('reportchecktasks.macro.tooltip1')}' checked disabled/&gt;")#else #set($action = "${checkbox} title='${services.localization.render('reportchecktasks.macro.tooltip0')}' disabled/&gt;")#end
 #set($document = $xwiki.getDocument($item[0]))
-#set($pageLink = $escapetool.javascript("&lt;a href='$document.getURL()'>$document.title&lt;/a>"))
-#set($pageAnchor= $escapetool.javascript("&lt;a href='$document.getURL()#$item[2]'>$item[3]&lt;/a>"))
+#set($pageLink = $escapetool.javascript("&lt;a href='$document.getURL()'&gt;$document.title&lt;/a&gt;"))
+#set($pageAnchor= $escapetool.javascript("&lt;a href='$document.getURL()#$item[2]'&gt;$item[3]&lt;/a&gt;"))
 #if($item[5]=="")
   #set($name="")
   #set($profile="")
