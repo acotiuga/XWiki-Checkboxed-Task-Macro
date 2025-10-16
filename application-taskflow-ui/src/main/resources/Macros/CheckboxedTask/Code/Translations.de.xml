@@ -20,18 +20,18 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="Macros.CheckboxedTask.CheckboxedTaskTranslations.WebHome" locale="">
-  <web>Macros.CheckboxedTask.CheckboxedTaskTranslations</web>
-  <name>WebHome</name>
-  <language/>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.Code.Translations" locale="de">
+  <web>Macros.CheckboxedTask.Code</web>
+  <name>Translations</name>
+  <language>de</language>
   <defaultLanguage>en</defaultLanguage>
-  <translation>0</translation>
+  <translation>1</translation>
   <creator>xwiki:XWiki.Admin</creator>
-  <parent>WebHome</parent>
+  <parent>Main.WebHome</parent>
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title/>
+  <title>Translations</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>plain/1.0</syntaxId>
@@ -92,41 +92,4 @@ reportchecktasks.table.page=Seite
 reportchecktasks.table.task=Aufgabe
 reportchecktasks.table.responsible=Verantwortlich
 reportchecktasks.table.dueDate=Fällig</content>
-  <object>
-    <name>Macros.CheckboxedTask.CheckboxedTaskTranslations.WebHome</name>
-    <number>0</number>
-    <className>XWiki.TranslationDocumentClass</className>
-    <guid>9cc1701b-0f5f-47a7-8cdb-cc72ecfbb1f3</guid>
-    <class>
-      <name>XWiki.TranslationDocumentClass</name>
-      <customClass/>
-      <customMapping/>
-      <defaultViewSheet/>
-      <defaultEditSheet/>
-      <defaultWeb/>
-      <nameField/>
-      <validationScript/>
-      <scope>
-        <cache>0</cache>
-        <disabled>0</disabled>
-        <displayType>select</displayType>
-        <freeText>forbidden</freeText>
-        <largeStorage>0</largeStorage>
-        <multiSelect>0</multiSelect>
-        <name>scope</name>
-        <number>1</number>
-        <prettyName>Scope</prettyName>
-        <relationalStorage>0</relationalStorage>
-        <separator> </separator>
-        <separators>|, </separators>
-        <size>1</size>
-        <unmodifiable>0</unmodifiable>
-        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
-        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-      </scope>
-    </class>
-    <property>
-      <scope>WIKI</scope>
-    </property>
-  </object>
 </xwikidoc>

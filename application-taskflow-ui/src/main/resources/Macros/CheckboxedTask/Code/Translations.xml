@@ -20,21 +20,21 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="Macros.CheckboxedTask.CheckboxedTaskTranslations.WebHome" locale="en">
-  <web>Macros.CheckboxedTask.CheckboxedTaskTranslations</web>
-  <name>WebHome</name>
-  <language>en</language>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.Code.Translations" locale="">
+  <web>Macros.CheckboxedTask.Code</web>
+  <name>Translations</name>
+  <language/>
   <defaultLanguage>en</defaultLanguage>
-  <translation>1</translation>
+  <translation>0</translation>
   <creator>xwiki:XWiki.Admin</creator>
-  <parent>WebHome</parent>
+  <parent>Main.WebHome</parent>
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title/>
+  <title>Translations</title>
   <comment/>
   <minorEdit>false</minorEdit>
-  <syntaxId>xwiki/2.1</syntaxId>
+  <syntaxId>plain/1.0</syntaxId>
   <hidden>true</hidden>
   <content>rendering.macro.checktask.name=Task with checkbox
 rendering.macro.checktask.description=Add a task with a clickable check box.
@@ -56,7 +56,7 @@ rendering.macro.reportchecktasks.parameter.page.name=Space
 rendering.macro.reportchecktasks.parameter.page.description=Show tasks from this page and its subpages:
 rendering.macro.reportchecktasks.parameter.done.name=Completed
 rendering.macro.reportchecktasks.parameter.done.description=Set this value to 0 for uncompleted tasks or 1 for completed tasks. If you want to see both uncompleted and completed tasks in your report, set this value to 2. The default value for this setting is 0.
-rendering.macro.reportchecktasks.parameter.filters.descritption=Instead of fixed query parameters you can use adjustible filters for the query. Use this ifyou want a comprehensive filterabel task report. Use these parameters: done, responsible, dueDate, page. Concatenate them using &amp;. Example: done=0&amp;responsible=username&amp;dueDate=01.01.2023-31.03.2023&amp;page=Main.WebHome
+rendering.macro.reportchecktasks.parameter.filters.descritption=Instead of fixed query parameters you can use adjustible filters for the query. Use this ifyou want a comprehensive filterabel task report. Use these parameters: done, responsible, dueDate, page. Concatenate them using &amp;amp;. Example: done=0&amp;amp;responsible=username&amp;amp;dueDate=01.01.2023-31.03.2023&amp;amp;page=Main.WebHome
 rendering.macro.reportchecktasks.parameter.project.name=Project or Workgroup
 rendering.macro.reportchecktasks.parameter.project.description=Additionally show tasks from project or workgroup pages.
 
@@ -92,4 +92,41 @@ reportchecktasks.table.page=Page
 reportchecktasks.table.task=Task
 reportchecktasks.table.responsible=Responsible
 reportchecktasks.table.dueDate=Due date</content>
+  <object>
+    <name>Macros.CheckboxedTask.Code.Translations</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>e8b93274-01aa-4833-86d7-d1a12261d6d2</guid>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
 </xwikidoc>
