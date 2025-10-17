@@ -38,3 +38,12 @@ This adds a clickable icon for quick insertion of a task:
 * **Task Report Macro**: Contains the macro **reportchecktasks** that inserts a task report in pages using the default **live data** macro. Also contains another JavaScript listener listening for checking/unchecking events within the live data table.
 * **Tasks JSON**: Defines the database query and formats the input for the live data macro in the task report
 * **Translations**: Contains the localized labels of the task and task report macros
+
+## Note
+If you previously installed [XWiki-Checkboxed-Task-Macro version 1.1.2 or earlier](https://github.com/jmiba/XWiki-Checkboxed-Task-Macro), you must manually delete the following pages. These pages were renamed in the newer version of the extension, but the upgrade process does not automatically remove the old ones.
+* Macros.CheckboxedTask.CheckboxedTaskListener.WebHome
+* Macros.CheckboxedTask.CheckboxedTaskReport.WebHome
+* Macros.CheckboxedTask.CheckboxedTaskTranslations.WebHome
+* Macros.CheckboxedTask.CheckboxUpdater
+* Macros.CheckboxedTask.TaskClass
+* Macros.CheckboxedTask.TasksJSON
