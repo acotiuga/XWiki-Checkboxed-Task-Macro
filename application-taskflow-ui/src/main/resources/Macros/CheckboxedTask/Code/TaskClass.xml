@@ -20,14 +20,14 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="Macros.CheckboxedTask.TaskClass" locale="">
-  <web>Macros.CheckboxedTask</web>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.Code.TaskClass" locale="">
+  <web>Macros.CheckboxedTask.Code</web>
   <name>TaskClass</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
   <creator>xwiki:XWiki.Admin</creator>
-  <parent>XWiki.XWikiClasses</parent>
+  <parent>WebHome</parent>
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
@@ -44,7 +44,7 @@
 #set ($defaultParent = $doc.fullName)
 {{/velocity}}</content>
   <class>
-    <name>Macros.CheckboxedTask.TaskClass</name>
+    <name>Macros.CheckboxedTask.Code.TaskClass</name>
     <customClass/>
     <customMapping/>
     <defaultViewSheet/>
@@ -153,7 +153,7 @@
     </task>
   </class>
   <object>
-    <name>Macros.CheckboxedTask.TaskClass</name>
+    <name>Macros.CheckboxedTask.Code.TaskClass</name>
     <number>0</number>
     <className>XWiki.DocumentSheetBinding</className>
     <guid>4c2e72b9-8f53-4d1f-abb4-049cc034c1a4</guid>

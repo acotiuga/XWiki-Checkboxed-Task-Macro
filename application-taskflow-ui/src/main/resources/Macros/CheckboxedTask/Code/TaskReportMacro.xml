@@ -20,25 +20,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="Macros.CheckboxedTask.CheckboxedTaskReport.WebHome" locale="">
-  <web>Macros.CheckboxedTask.CheckboxedTaskReport</web>
-  <name>WebHome</name>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.Code.TaskReportMacro" locale="">
+  <web>Macros.CheckboxedTask.Code</web>
+  <name>TaskReportMacro</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
   <creator>xwiki:XWiki.Admin</creator>
-  <parent>Macros.CheckboxedTask.WebHome</parent>
+  <parent>WebHome</parent>
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title>CheckboxedTaskReport</title>
+  <title>Task Report Macro</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
   <content>This is the **task report** macro. It collects task by user, completion status or page space in a sortable tick-off list. It is based on the [[live data macro&gt;&gt;https://extensions.xwiki.org/xwiki/bin/view/Extension/Live%20Data%20Macro/]].</content>
   <object>
-    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <name>Macros.CheckboxedTask.Code.TaskReportMacro</name>
     <number>0</number>
     <className>XWiki.JavaScriptExtension</className>
     <guid>a5767243-4e57-4a37-a27f-cd3d686a9527</guid>
@@ -157,7 +157,7 @@ require(['jquery'], function ($) {
  (XWiki &amp;&amp; XWiki.domIsLoaded &amp;&amp; init()) || document.observe("xwiki:dom:loaded", init);
   
   function updateTask(page,task,checked){
-    var Url = new XWiki.Document('CheckboxUpdater','Macros.CheckboxedTask').getURL('get');
+    var Url = new XWiki.Document('TaskUpdater','Macros.CheckboxedTask.Code').getURL('get');
     var UrlParams = { 'xpage': 'plain','outputSyntax': 'plain', 'page' : page, 'task' : task, 'checked' : checked };
     //console.log(UrlParams);
     //console.log(Url);
@@ -190,7 +190,7 @@ require(['jquery'], function ($) {
     </property>
   </object>
   <object>
-    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <name>Macros.CheckboxedTask.Code.TaskReportMacro</name>
     <number>0</number>
     <className>XWiki.WikiMacroClass</className>
     <guid>1768933a-bab0-4ab6-80ce-54895c6de7f3</guid>
@@ -411,7 +411,7 @@ require(['jquery'], function ($) {
 #if(!$reportCounter)
   #set($reportCounter = 0)
   #if("$xcontext.action" != "edit")
-    #set ($discard = $xwiki.jsx.use('Macros.CheckboxedTask.CheckboxedTaskReport.WebHome'))
+    #set ($discard = $xwiki.jsx.use('Macros.CheckboxedTask.Code.TaskReportMacro'))
   #end
   #set ($discard = $xwiki.ssx.use('Macros.CheckboxedTask.WebHome'))
   
@@ -481,7 +481,7 @@ require(['jquery'], function ($) {
     properties="🗹,task,dueDate,responsible,page"
     source="liveTable"
     #if($filters)filters="$filters"#end
-    sourceParameters="resultPage=Macros.CheckboxedTask.TasksJSON&amp;translationPrefix=reportchecktasks.table.&amp;className=XWiki.XWikiUsers#if($sourceParams)$sourceParams#end"
+    sourceParameters="resultPage=Macros.CheckboxedTask.Code.TaskJSON&amp;translationPrefix=reportchecktasks.table.&amp;className=XWiki.XWikiUsers#if($sourceParams)$sourceParams#end"
     sort="dueDate:asc"
     limit="10"
   }}{
@@ -549,9 +549,6 @@ require(['jquery'], function ($) {
       </defaultCategories>
     </property>
     <property>
-      <defaultCategory>Social</defaultCategory>
-    </property>
-    <property>
       <description>Insert a list of tasks belonging to a user, a page or a space</description>
     </property>
     <property>
@@ -571,7 +568,7 @@ require(['jquery'], function ($) {
     </property>
   </object>
   <object>
-    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <name>Macros.CheckboxedTask.Code.TaskReportMacro</name>
     <number>0</number>
     <className>XWiki.WikiMacroParameterClass</className>
     <guid>038116d4-bdb6-4e40-a8da-277f5ccbc548</guid>
@@ -661,7 +658,7 @@ require(['jquery'], function ($) {
     </property>
   </object>
   <object>
-    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <name>Macros.CheckboxedTask.Code.TaskReportMacro</name>
     <number>5</number>
     <className>XWiki.WikiMacroParameterClass</className>
     <guid>93b9c136-ceb7-420e-b333-8c574a12acf7</guid>
@@ -751,7 +748,7 @@ require(['jquery'], function ($) {
     </property>
   </object>
   <object>
-    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <name>Macros.CheckboxedTask.Code.TaskReportMacro</name>
     <number>6</number>
     <className>XWiki.WikiMacroParameterClass</className>
     <guid>8e8ebe92-0f9c-4599-a0b3-ed06a3f71a93</guid>

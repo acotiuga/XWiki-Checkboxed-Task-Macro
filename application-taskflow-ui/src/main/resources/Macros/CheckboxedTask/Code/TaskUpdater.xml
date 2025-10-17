@@ -20,9 +20,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="Macros.CheckboxedTask.CheckboxUpdater" locale="">
-  <web>Macros.CheckboxedTask</web>
-  <name>CheckboxUpdater</name>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.Code.TaskUpdater" locale="">
+  <web>Macros.CheckboxedTask.Code</web>
+  <name>TaskUpdater</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
@@ -31,7 +31,7 @@
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title>CheckboxUpdater</title>
+  <title>Task Updater</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
@@ -46,7 +46,7 @@
   ## Then, get its document
   #set($document  = $xwiki.getDocument($request.page))
   ## Then, get the 'Task' object
-  #set($object = $document.getObject('Macros.CheckboxedTask.TaskClass','rid',$request.task))
+  #set($object = $document.getObject('Macros.CheckboxedTask.Code.TaskClass','rid',$request.task))
   ## set task status
   #if($request.checked == true)
     #set($done =$services.localization.render('checktask.macro.result1'))

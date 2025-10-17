@@ -61,15 +61,15 @@ config['xwiki-macro'].insertButtons = [
 ];
 {{/code}}
 
-**Macros and components:** 
+**Macros and components:**
 
-* [[CheckboxedTask&gt;&gt;CheckboxedTask]]: Contains the **checktask **macro that inserts checkboxed tasks in pages and a JavaScript listener that listens for checking/unchecking events
-* [[CheckboxedTaskListener&gt;&gt;doc:.CheckboxedTaskListener.WebHome]]: Event listener that listens for creating and updating tasks on pages, adding xobjects to the respective pages
-* [[CheckboxUpdater&gt;&gt;doc:CheckboxUpdater]]: Is called by the JavaScript listener to update the xobject of a task when checked or unchecked
-* [[Task Class&gt;&gt;doc:TaskClass]]:  Xobject class that defines the properties of tasks to be saved 
-* [[CheckboxedTaskReport&gt;&gt;doc:.CheckboxedTaskReport.WebHome]]: Contains the macro **reportchecktasks **that inserts a task report in pages using the default **live data** macro. Also contains another JavaScript listener listening for cheking/unchecking events within the live data table.
-* [[TasksJSON&gt;&gt;doc:TasksJSON]]: Defines the database query and formats the input for the live data macro in  the task report
-* [[CheckboxedTaskTranslations&gt;&gt;doc:.CheckboxedTaskTranslations.WebHome||style="outline-width: 0px !important; user-select: auto !important;"]]: Contains the localized labes of the task and task report macros</content>
+* [[Checkboxed Task&gt;&gt;CheckboxedTask]]: Contains the **checktask **macro that inserts checkboxed tasks in pages and a JavaScript listener that listens for checking/unchecking events
+* [[Task Listener&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskListener]]: Event listener that listens for creating and updating tasks on pages, adding XObjects to the respective pages
+* [[Task Updater&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskUpdater]]: Is called by the JavaScript listener to update the XObject of a task when checked or unchecked
+* [[Task Class&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskClass]]: XObject class that defines the properties of tasks to be saved
+* [[Task Report Macro&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskReportMacro]]: Contains the macro **reportchecktasks **that inserts a task report in pages using the default **live data** macro. Also contains another JavaScript listener listening for checking/unchecking events within the live data table.
+* [[Task JSON&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskJSON]]: Defines the database query and formats the input for the live data macro in the task report
+* [[Translations&gt;&gt;doc:.Code.Translations]]: Contains the localized labels of the task and task report macros</content>
   <object>
     <name>Macros.CheckboxedTask.WebHome</name>
     <number>0</number>
@@ -164,7 +164,7 @@ config['xwiki-macro'].insertButtons = [
 #set($success2 = $services.localization.render('checktask.macro.success2'))
 #set($error = $services.localization.render('checktask.macro.error'))
 
-//Ajax function: update task objects through page CheckboxUpdater
+//Ajax function: update task objects through page Task Updater
 require(['jquery'], function ($) {
   //console.log($('#tasksLiveData').length)
   if ($('#tasksLiveData').length==0){
@@ -186,7 +186,7 @@ require(['jquery'], function ($) {
   }
 
   function updateTask(page,task,checked){
-    var Url = new XWiki.Document('CheckboxUpdater','Macros.CheckboxedTask').getURL('get');
+    var Url = new XWiki.Document('TaskUpdater','Macros.CheckboxedTask.Code').getURL('get');
     var UrlParams = { 'xpage': 'plain','outputSyntax': 'plain', 'page' : page, 'task' : task, 'checked' : checked };
     //console.log(UrlParams);
     //console.log(Url);
@@ -705,9 +705,9 @@ td[data-title=🗹]{
       <code>{{velocity}}
 {{html wiki="true"}}
 ## As a preliminary, for debugging reasons, get a count of task objects connected with the document
-#set($objects = $doc.getObjects('Macros.CheckboxedTask.TaskClass'))
+#set($objects = $doc.getObjects('Macros.CheckboxedTask.Code.TaskClass'))
 #set($objIndex = $objects.size() - 1)
-#set($objStart = $doc.getObjectNumbers('Macros.CheckboxedTask.TaskClass') - $objects.size())
+#set($objStart = $doc.getObjectNumbers('Macros.CheckboxedTask.Code.TaskClass') - $objects.size())
 ## First, set a counter for how often the macro is used in the document. The number is needed for the input field.
 #if(!$taskCounter)
   #set($taskCounter = 0)
@@ -726,7 +726,7 @@ td[data-title=🗹]{
 ## Next, get the task parameters, or set them from the corresponding object properties
 #if($xcontext.macro.params.rid)
   #set($rid = "$!xcontext.macro.params.rid")
-  #set($object = $doc.getObject('Macros.CheckboxedTask.TaskClass','rid',$rid))
+  #set($object = $doc.getObject('Macros.CheckboxedTask.Code.TaskClass','rid',$rid))
   #set($done = $escapetool.xml($object.getValue('done')))
 #else
   #set($done = 0)
@@ -766,9 +766,6 @@ td[data-title=🗹]{
       <defaultCategories>
         <value>Content</value>
       </defaultCategories>
-    </property>
-    <property>
-      <defaultCategory>Content</defaultCategory>
     </property>
     <property>
       <description>Add a checkboxed task.</description>

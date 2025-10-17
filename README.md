@@ -31,10 +31,10 @@ This adds a clickable icon for quick insertion of a task:
 
 ## Macros and components 
 
-* **CheckboxedTask**: Contains the **checktask** macro that inserts checkboxed tasks in pages and a JavaScript listener that listens for checking/unchecking events
-* **CheckboxedTaskListener**: Event listener that listens for creating and updating tasks on pages, adding xobjects to the respective pages
-* **CheckboxUpdater**: Is called by the JavaScript listener to update the xobject of a task when checked or unchecked
-* **Task Class**:  Xobject class that defines the properties of tasks to be saved 
-* **CheckboxedTaskReport**: Contains the macro **reportchecktasks** that inserts a task report in pages using the default **live data** macro. Also contains another JavaScript listener listening for cheking/unchecking events within the live data table.
-* **TasksJSON**: Defines the database query and formats the input for the live data macro in  the task report
-* **CheckboxedTaskTranslations**: Contains the localized labes of the task and task report macros
+* **Checkboxed Task**: Contains the **checktask** macro that inserts checkboxed tasks in pages and a JavaScript listener that listens for checking/unchecking events
+* **Task Listener**: Event listener that listens for creating and updating tasks on pages, adding XObjects to the respective pages
+* **Task Updater**: Is called by the JavaScript listener to update the XObject of a task when checked or unchecked
+* **Task Class**: XObject class that defines the properties of tasks to be saved 
+* **Task Report Macro**: Contains the macro **reportchecktasks** that inserts a task report in pages using the default **live data** macro. Also contains another JavaScript listener listening for checking/unchecking events within the live data table.
+* **Tasks JSON**: Defines the database query and formats the input for the live data macro in the task report
+* **Translations**: Contains the localized labels of the task and task report macros

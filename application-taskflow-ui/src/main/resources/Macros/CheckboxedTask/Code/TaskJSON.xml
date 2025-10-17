@@ -20,9 +20,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="Macros.CheckboxedTask.TasksJSON" locale="">
-  <web>Macros.CheckboxedTask</web>
-  <name>TasksJSON</name>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.Code.TaskJSON" locale="">
+  <web>Macros.CheckboxedTask.Code</web>
+  <name>TaskJSON</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
@@ -31,7 +31,7 @@
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title>TasksJSON</title>
+  <title>Task JSON</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
@@ -147,10 +147,10 @@
 #end
 #if (!$request.done) #set ($doneClause ="")#else #set($doneClause = " and task.done = "+"'$!{request.done}'")#end
 ## Compute the total number of entries
-#set ($countQuery="select count(doc.id) from Document doc, doc.object(Macros.CheckboxedTask.TaskClass) as task where task.protected = '0' and (doc.fullName not like 'Sandbox.%'$inClause) and task.task like :taskFilter and task.responsible like :responsibleFilter $date $doneClause $hiddenClause")
+#set ($countQuery="select count(doc.id) from Document doc, doc.object(Macros.CheckboxedTask.Code.TaskClass) as task where task.protected = '0' and (doc.fullName not like 'Sandbox.%'$inClause) and task.task like :taskFilter and task.responsible like :responsibleFilter $date $doneClause $hiddenClause")
 #set ($count = $services.query.xwql($countQuery).bindValue("taskFilter", $taskFilter).bindValue("responsibleFilter", $responsibleFilter).execute())
 ## Compute the entries to display
-#set ($resultsQuery="select doc.fullName, task.done, task.rid, task.task, task.dueDate, task.responsible from Document doc, doc.object(Macros.CheckboxedTask.TaskClass) as task where task.protected = '0' and (doc.fullName not like 'Sandbox.%'$inClause) and task.task like :taskFilter and task.responsible like :responsibleFilter $date $doneClause $hiddenClause $sortClause")
+#set ($resultsQuery="select doc.fullName, task.done, task.rid, task.task, task.dueDate, task.responsible from Document doc, doc.object(Macros.CheckboxedTask.Code.TaskClass) as task where task.protected = '0' and (doc.fullName not like 'Sandbox.%'$inClause) and task.task like :taskFilter and task.responsible like :responsibleFilter $date $doneClause $hiddenClause $sortClause")
 #set ($result = $services.query.xwql($resultsQuery).bindValue("taskFilter", $taskFilter).bindValue("responsibleFilter", $responsibleFilter).setLimit($limit).setOffset($offset).execute())
 ## =============
 ## Generate the JSON
