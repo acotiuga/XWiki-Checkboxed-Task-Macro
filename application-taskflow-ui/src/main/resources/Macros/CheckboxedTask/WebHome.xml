@@ -158,54 +158,51 @@ config['xwiki-macro'].insertButtons = [
       <cache>long</cache>
     </property>
     <property>
-      <code>#set($hint = $services.localization.render('checktask.macro.hint'))
-#set($progress = $services.localization.render('checktask.macro.progress'))
-#set($success1 = $services.localization.render('checktask.macro.success1'))
-#set($success2 = $services.localization.render('checktask.macro.success2'))
-#set($error = $services.localization.render('checktask.macro.error'))
+      <code>/*!
+#set ($l10nKeys = [
+  'checktask.macro.hint',
+  'checktask.macro.progress',
+  'checktask.macro.success1',
+  'checktask.macro.success2',
+  'checktask.macro.error'
+])
+#set ($l10n = {})
+#foreach ($key in $l10nKeys)
+  #set ($discard = $l10n.put($key, $services.localization.render($key)))
+#end
+#[[*/
+// Start JavaScript-only code.
+(function(l10n) {
+  "use strict";
+  //Ajax function: update task objects through page Task Updater.
+  require(['jquery'], function ($) {
+    if ($('#tasksLiveData').length == 0){
+      new XWiki.widgets.Notification(l10n['checktask.macro.hint'], 'info');
+      var checkboxes = $('input[name="checktask"]');
 
-//Ajax function: update task objects through page Task Updater
-require(['jquery'], function ($) {
-  //console.log($('#tasksLiveData').length)
-  if ($('#tasksLiveData').length==0){
-    new XWiki.widgets.Notification("$hint", 'info');
-    var checkboxes = $('input[name="checktask"]');
-    //console.log("Test: "+checkboxes);
-    //enable task checkboxes
-    for(ind=0;ind&lt;checkboxes.length;ind++){
-         checkboxes[ind].removeAttribute('disabled');
-     // console.log(checkboxes[ind]);
+      for (var i = 0; i &lt; checkboxes.length; i++) {
+        // Enable task checkboxes.
+        checkboxes[i].removeAttribute('disabled');
+        // Add a change event listener.
+        checkboxes[i].addEventListener('change', function() {
+          updateTask(this.dataset.page, this.value, this.checked)
+        });
       }
-    // add a change event listener
-    for (var i = 0; i &lt; checkboxes.length; i++) {
-      checkboxes[i].addEventListener('change', function() {
-        //console.log("Event fired: "+ this.dataset.page + " - " + this.value + ": "+this.checked);
-        updateTask(this.dataset.page, this.value, this.checked)
-      });
     }
-  }
 
-  function updateTask(page,task,checked){
-    var Url = new XWiki.Document('TaskUpdater','Macros.CheckboxedTask.Code').getURL('get');
-    var UrlParams = { 'xpage': 'plain','outputSyntax': 'plain', 'page' : page, 'task' : task, 'checked' : checked };
-    //console.log(UrlParams);
-    //console.log(Url);
-    var notification = new XWiki.widgets.Notification("$progress ...", 'inprogress');
-    $.post(Url, UrlParams, function( response, status, xhr ) {
-      notification.replace(new XWiki.widgets.Notification("$success1 &lt;b&gt;"+ response.task + "&lt;/b&gt; &lt;i&gt;" + response.result + "&lt;/i&gt; $success2",'done'));
-     if ( status == "error" ) {
-       var msg = "$error: ";
-       notification.replace(new XWiki.widgets.Notification(msg + xhr.status + " " + xhr.statusText,'error'));
+    function updateTask(page,task,checked) {
+      var url = new XWiki.Document('TaskUpdater','Macros.CheckboxedTask.Code').getURL('get');
+      var urlParams = {'xpage': 'plain', 'outputSyntax': 'plain', 'page': page, 'task': task, 'checked': checked };
+      var notification = new XWiki.widgets.Notification(l10n['checktask.macro.progress'], 'inprogress');
+      $.post(url, urlParams, function(response, status, xhr) {
+        notification.replace(new XWiki.widgets.Notification(l10n['checktask.macro.success1'] + '&lt;b&gt;' + response.task + '&lt;/b&gt; &lt;i&gt;' + response.result + '&lt;/i&gt; ' + l10n['checktask.macro.success1'],'done'));
+        if (status == 'error' ) {
+          notification.replace(new XWiki.widgets.Notification(l10n['checktask.macro.error'] + ': ' + xhr.status + ' ' + xhr.statusText, 'error'));
         }
       });
-  }
-
-  //Errors to be logged in console
-  $(document).ajaxError(function(event, jqxhr, settings, message)
-  {
-     // console.log(message);
-  });
-}); //end jquery</code>
+    }
+  }); //end jquery
+}).apply(']]#', $jsontool.serialize([$l10n]));</code>
     </property>
     <property>
       <name>Checkbox Checked Listener</name>
@@ -328,17 +325,17 @@ require(['jquery'], function ($) {
   max-width: unset;
   margin-bottom: unset;
   display: unset;
-  cursor:pointer;
+  cursor: pointer;
 }
 .checktask-span,.checktask-checkbox {
-    cursor:pointer;
+  cursor: pointer;
 }
 .checktask-label span {
   font-weight: 400;
 }
 
 td[data-title=🗹]{
-  padding-left:30px;
+  padding-left: 30px;
 }</code>
     </property>
     <property>
@@ -466,7 +463,7 @@ td[data-title=🗹]{
   top: 1px;
 }
 .cke_button_icon.cke_button__xwiki-macro-checktask_icon::before {
-  content: "🗹";
+  content: '🗹';
   display: inline-block;
   text-align: center;
   width: 16px;
@@ -703,55 +700,78 @@ td[data-title=🗹]{
     </property>
     <property>
       <code>{{velocity}}
-{{html wiki="true"}}
 ## As a preliminary, for debugging reasons, get a count of task objects connected with the document
-#set($objects = $doc.getObjects('Macros.CheckboxedTask.Code.TaskClass'))
-#set($objIndex = $objects.size() - 1)
-#set($objStart = $doc.getObjectNumbers('Macros.CheckboxedTask.Code.TaskClass') - $objects.size())
+#set ($objects = $doc.getObjects('Macros.CheckboxedTask.Code.TaskClass'))
+#set( $objIndex = $objects.size() - 1)
+#set ($objStart = $doc.getObjectNumbers('Macros.CheckboxedTask.Code.TaskClass') - $objects.size())
 ## First, set a counter for how often the macro is used in the document. The number is needed for the input field.
-#if(!$taskCounter)
-  #set($taskCounter = 0)
-  #if("$xcontext.action" != "edit")
-    #set($discard = $xwiki.jsx.use('Macros.CheckboxedTask.WebHome'))
+#if (!$taskCounter)
+  #set ($taskCounter = 0)
+  #if ($xcontext.action != 'edit')
+    #set ($discard = $xwiki.jsx.use('Macros.CheckboxedTask.WebHome'))
   #end
-  #set($discard = $xwiki.ssx.use('Macros.CheckboxedTask.WebHome'))
+  #set ($discard = $xwiki.ssx.use('Macros.CheckboxedTask.WebHome'))
 #else
-  #set($taskCounter = $taskCounter + 1)
-  #set($rid="")
-  #set($page="")
-  #set($responsible="")
-  #set($dueDate="")
-  #set($done="")
+  #set ($taskCounter = $taskCounter + 1)
+  #set ($rid = '')
+  #set ($page = '')
+  #set ($responsible = '')
+  #set ($dueDate = '')
+  #set ($done = '')
 #end
 ## Next, get the task parameters, or set them from the corresponding object properties
-#if($xcontext.macro.params.rid)
-  #set($rid = "$!xcontext.macro.params.rid")
-  #set($object = $doc.getObject('Macros.CheckboxedTask.Code.TaskClass','rid',$rid))
-  #set($done = $escapetool.xml($object.getValue('done')))
+#if ($xcontext.macro.params.rid)
+  #set ($rid = "$!xcontext.macro.params.rid")
+  #set ($object = $doc.getObject('Macros.CheckboxedTask.Code.TaskClass', 'rid', $rid))
+  #set ($done = $escapetool.xml($object.getValue('done')))
 #else
-  #set($done = 0)
-  #set($rid = "new (no RID)")
+  #set( $done = 0)
+  #set ($rid = 'new (no RID)')
 #end
-#if($xcontext.macro.params.dueDate)
-  #set($dueDate = "$!xcontext.macro.params.dueDate")
-  ##Now format the due date to be printed in a readable and reasonable manner
-  #set($formatter = $xwiki.jodatime.getDateTimeFormatterForPattern(${services.localization.render('checktask.macro.dateFormat')}))
-  #set($dueDate = $datetool.toDate($xwiki.getXWikiPreference('dateformat','yyyy/MM/dd HH:mm'),$dueDate)) 
-  ##$xwiki.getXWikiPreference('dateformat','yyyy/MM/dd HH:mm'); $dueDate}
-  #set($dueDate = $formatter.print($dueDate))
+#if ($xcontext.macro.params.dueDate)
+  #set ($dueDate = "$!xcontext.macro.params.dueDate")
+  ## Now format the due date to be printed in a readable and reasonable manner.
+  #set ($formatter = $xwiki.jodatime.getDateTimeFormatterForPattern($services.localization.render('checktask.macro.dateFormat')))
+  #set ($dueDate = $datetool.toDate($xwiki.getXWikiPreference('dateformat','yyyy/MM/dd HH:mm'), $dueDate))
+  #set ($dueDate = $formatter.print($dueDate))
 #end
-##$dateFormat; $dueDate
-#if($xcontext.macro.params.responsible)
-  #set($responsible = "$!xcontext.macro.params.responsible")
+#if ($xcontext.macro.params.responsible)
+  #set ($responsible = "$!xcontext.macro.params.responsible")
 #end
-#if($wikimacro.content)
-  #set($task = $wikimacro.content)
+#if ($wikimacro.content)
+  #set ($task = $wikimacro.content)
 #end
-&lt;span id="span-${taskCounter}" class="checktask-span"&gt;&lt;input class="checktask-checkbox" id="$rid" type="checkbox" name="checktask" data-page="${doc.fullName}" value="${rid}"#if($done == 1) title="$services.localization.render('reportchecktasks.macro.tooltip1')" checked#else title="$services.localization.render('reportchecktasks.macro.tooltip0')"#end disabled/&gt;&lt;label for="$rid" class="checktask-label" #if($done == 1) title="$services.localization.render('reportchecktasks.macro.tooltip1')" #else title="$services.localization.render('reportchecktasks.macro.tooltip0')"#end&gt;#if(($dueDate &amp;&amp; $dueDate!="") || ($responsible &amp;&amp; $responsible!=""))$task &lt;span&gt;($services.localization.render('checktask.macro.toDo')#if($dueDate &amp;&amp; $dueDate!="") $services.localization.render('checktask.macro.byWhen') $dueDate#end#if($responsible &amp;&amp; $responsible!="") $services.localization.render('checktask.macro.byWho') {{mention reference="$responsible"/}}#end)&lt;/span&gt;#else $task #end&lt;/label&gt;&lt;/span&gt; ##**Debug: $responsible; $dueDate; $done**
+#set ($titleKey = 'eportchecktasks.macro.tooltip0')
+#set ($checked = '')
+#if ($done == 1)
+  #set ($titleKey = 'reportchecktasks.macro.tooltip1')
+  #set ($checked = 'ckecked')
+#end
+#set ($title = $services.localization.render($titleKey))
+#set ($hasDueDate = false)
+#set ($dueDateText = '')
+#if ("$!dueDate" != '')
+  #set ($hasDueDate = true)
+  #set ($dueDateText = $services.localization.render('checktask.macro.byWhen'))
+#end
+#set ($responsibleText = '')
+#set ($hasResponsible = false)
+#if ("$!responsible" != '')
+  #set ($hasResponsible = true)
+  #set ($responsibleText = $services.localization.render('checktask.macro.byWho'))
+#end
+{{html wiki="true"}}
+&lt;span id="span-$taskCounter" class="checktask-span"&gt;
+  &lt;input class="checktask-checkbox" id="$rid" type="checkbox" name="checktask" data-page="$doc.fullName" value="$rid" title="$title" $checked disabled/&gt;
+  &lt;label for="$rid" class="checktask-label" title="$title"&gt;
+    $task
+    #if ($hasDueDate || $hasResponsible)
+      &lt;span&gt;($services.localization.render('checktask.macro.toDo') $dueDateText $dueDate $responsibleText {{mention reference="$responsible"/}})&lt;/span&gt;
+    #end
+  &lt;/label&gt;
+&lt;/span&gt;
 {{/html}}
-{{/velocity}}
-
-</code>
+{{/velocity}}</code>
     </property>
     <property>
       <contentDescription/>

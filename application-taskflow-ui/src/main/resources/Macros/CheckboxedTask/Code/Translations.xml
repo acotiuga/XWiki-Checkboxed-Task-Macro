@@ -75,7 +75,7 @@ reportchecktasks.macro.warning=You can insert the "Task Report" macro only once 
 
 checktask.macro.dateFormat=yyyy/MM/dd
 checktask.macro.hint=You can mark tasks as completed by ticking them off.
-checktask.macro.progress=Task status is being updated
+checktask.macro.progress=Task status is being updated ...
 checktask.macro.success1=You have marked the task
 checktask.macro.success2=
 checktask.macro.result0=Task
