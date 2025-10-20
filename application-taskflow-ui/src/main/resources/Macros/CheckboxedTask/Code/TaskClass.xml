@@ -69,7 +69,7 @@
     </done>
     <dueDate>
       <customDisplay/>
-      <dateFormat>yyyy/MM/dd</dateFormat>
+      <dateFormat>yyyy/MM/dd HH:mm</dateFormat>
       <disabled>0</disabled>
       <emptyIsToday>0</emptyIsToday>
       <hint/>

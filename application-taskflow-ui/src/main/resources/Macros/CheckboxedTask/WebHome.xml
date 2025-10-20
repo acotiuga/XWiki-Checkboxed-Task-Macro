@@ -752,7 +752,7 @@ td[data-title=🗹]{
 #set ($dueDateText = '')
 #if ("$!dueDate" != '')
   #set ($hasDueDate = true)
-  #set ($dueDateText = $services.localization.render('checktask.macro.byWhen'))
+  #set ($dueDateText = "$services.localization.render('checktask.macro.byWhen') $dueDate")
 #end
 #set ($responsibleText = '')
 #set ($hasResponsible = false)
@@ -766,7 +766,7 @@ td[data-title=🗹]{
   &lt;label for="$rid" class="checktask-label" title="$title"&gt;
     $task
     #if ($hasDueDate || $hasResponsible)
-      &lt;span&gt;($services.localization.render('checktask.macro.toDo') $dueDateText $dueDate $responsibleText {{mention reference="$responsible"/}})&lt;/span&gt;
+      &lt;span&gt;($services.localization.render('checktask.macro.toDo') $dueDateText #if($hasResponsible)$responsibleText {{mention reference="$responsible"/}})#end&lt;/span&gt;
     #end
   &lt;/label&gt;
 &lt;/span&gt;
