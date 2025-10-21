@@ -128,11 +128,11 @@
       <customDisplay/>
       <defaultValue/>
       <disabled>0</disabled>
-      <displayType>input</displayType>
+      <displayType>select</displayType>
       <freeText/>
       <hint/>
       <largeStorage>0</largeStorage>
-      <multiSelect>1</multiSelect>
+      <multiSelect>0</multiSelect>
       <name>responsible</name>
       <number>4</number>
       <picker>1</picker>
