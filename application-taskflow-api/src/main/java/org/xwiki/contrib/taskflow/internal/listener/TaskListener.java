@@ -120,49 +120,41 @@ public class TaskListener implements EventListener
         DocumentReference taskClassRef = resolver.resolve("Macros.CheckboxedTask.Code.TaskClass");
 
         String content = currentDoc.getContent().trim();
-        boolean hasModifiedTasks = false;
 
         try {
             if (!content.contains("{{checktask")) {
                 // No checktask macros at all, just clean objects if any exist
                 if (!currentDoc.getXObjects(taskClassRef).isEmpty()) {
-                    hasModifiedTasks = removeAllTasks(currentDoc, taskClassRef);
+                    removeAllTasks(currentDoc, taskClassRef);
                 }
             } else {
                 XDOM xdom = parser.parse(new StringReader(content));
                 List<MacroBlock> checkTaskMacros =
                     xdom.getBlocks(new MacroBlockMatcher("checktask"), Block.Axes.DESCENDANT);
 
-                hasModifiedTasks = synchronizeTasks(currentDoc, checkTaskMacros, taskClassRef, context);
-            }
-            if (hasModifiedTasks) {
-                context.getWiki().saveDocument(currentDoc, context);
+                synchronizeTasks(currentDoc, checkTaskMacros, taskClassRef, context);
             }
         } catch (Exception e) {
             logger.error("Failed to synchronize tasks for [{}]", currentDoc.getDocumentReference(), e);
         }
     }
 
-    private boolean synchronizeTasks(XWikiDocument doc, List<MacroBlock> macros, DocumentReference taskClassRef,
+    private void synchronizeTasks(XWikiDocument doc, List<MacroBlock> macros, DocumentReference taskClassRef,
         XWikiContext context) throws XWikiException
     {
-        boolean hasModifiedTasks = false;
         Set<String> foundRids = new HashSet<>();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
         for (MacroBlock macro : macros) {
-            hasModifiedTasks |= processMacro(macro, doc, taskClassRef, foundRids, simpleDateFormat, context);
+            processMacro(macro, doc, taskClassRef, foundRids, simpleDateFormat, context);
         }
-        hasModifiedTasks |= removeStaleTasks(doc, taskClassRef, foundRids);
-
-        return hasModifiedTasks;
+        removeStaleTasks(doc, taskClassRef, foundRids);
     }
 
-    private boolean processMacro(MacroBlock macro, XWikiDocument doc, DocumentReference taskClassRef,
+    private void processMacro(MacroBlock macro, XWikiDocument doc, DocumentReference taskClassRef,
         Set<String> foundRids, SimpleDateFormat simpleDateFormat, XWikiContext context) throws XWikiException
     {
-        boolean hasModifiedTasks = false;
         Map<String, String> params = new HashMap<>(macro.getParameters());
 
         String rid = params.get(RID);
@@ -177,7 +169,6 @@ public class TaskListener implements EventListener
             taskObj = doc.newXObject(taskClassRef, context);
             taskObj.setStringValue(RID, rid);
             taskObj.setStringValue("done", "0");
-            hasModifiedTasks = true;
         }
 
         String task = macro.getContent().trim();
@@ -199,32 +190,23 @@ public class TaskListener implements EventListener
             if (macroDueDate != null) {
                 taskObj.setDateValue(DUE_DATE, macroDueDate);
             }
-            hasModifiedTasks = true;
         }
-
-        return hasModifiedTasks;
     }
 
-    private boolean removeAllTasks(XWikiDocument doc, DocumentReference taskClassRef)
+    private void removeAllTasks(XWikiDocument doc, DocumentReference taskClassRef)
     {
-        boolean hasModifiedTasks = false;
         for (BaseObject obj : doc.getXObjects(taskClassRef)) {
             doc.removeXObject(obj);
-            hasModifiedTasks = true;
         }
-        return hasModifiedTasks;
     }
 
-    private boolean removeStaleTasks(XWikiDocument doc, DocumentReference taskClassRef, Set<String> validRids)
+    private void removeStaleTasks(XWikiDocument doc, DocumentReference taskClassRef, Set<String> validRids)
     {
-        boolean hasModifiedTasks = false;
         for (BaseObject obj : doc.getXObjects(taskClassRef)) {
             if (!validRids.contains(obj.getStringValue(RID))) {
                 doc.removeXObject(obj);
-                hasModifiedTasks = true;
             }
         }
-        return hasModifiedTasks;
     }
 
     private String generateRID()
