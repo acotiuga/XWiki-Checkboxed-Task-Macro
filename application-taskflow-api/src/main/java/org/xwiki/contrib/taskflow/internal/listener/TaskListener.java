@@ -20,7 +20,6 @@
 package org.xwiki.contrib.taskflow.internal.listener;
 
 import java.io.StringReader;
-import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,6 +50,9 @@ import org.xwiki.rendering.block.MacroBlock;
 import org.xwiki.rendering.block.XDOM;
 import org.xwiki.rendering.block.match.MacroBlockMatcher;
 import org.xwiki.rendering.parser.Parser;
+import org.xwiki.rendering.renderer.BlockRenderer;
+import org.xwiki.rendering.renderer.printer.DefaultWikiPrinter;
+import org.xwiki.rendering.renderer.printer.WikiPrinter;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -94,6 +96,10 @@ public class TaskListener implements EventListener
     @Named("xwiki/2.1")
     private Parser parser;
 
+    @Inject
+    @Named("xwiki/2.1")
+    private BlockRenderer blockRenderer;
+
     @Override
     public List<Event> getEvents()
     {
@@ -132,28 +138,32 @@ public class TaskListener implements EventListener
                     removeAllTasks(currentDoc, taskClassRef);
                 }
             } else {
-                XDOM xdom = parser.parse(new StringReader(content));
-                List<MacroBlock> checkTaskMacros =
-                    xdom.getBlocks(new MacroBlockMatcher("checktask"), Block.Axes.DESCENDANT);
-
-                synchronizeTasks(currentDoc, checkTaskMacros, taskClassRef, context);
+                synchronizeTasks(currentDoc, taskClassRef, context);
             }
         } catch (Exception e) {
             logger.error("Failed to synchronize tasks for [{}]", currentDoc.getDocumentReference(), e);
         }
     }
 
-    private void synchronizeTasks(XWikiDocument doc, List<MacroBlock> macros, DocumentReference taskClassRef,
-        XWikiContext context) throws XWikiException
+    private void synchronizeTasks(XWikiDocument doc, DocumentReference taskClassRef,
+        XWikiContext context) throws Exception
     {
-        Set<String> foundRids = new HashSet<>();
+        String content = doc.getContent();
+        XDOM xdom = parser.parse(new StringReader(content));
+        List<MacroBlock> macros = xdom.getBlocks(new MacroBlockMatcher("checktask"), Block.Axes.DESCENDANT);
 
+        Set<String> foundRids = new HashSet<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
         for (MacroBlock macro : macros) {
             processMacro(macro, doc, taskClassRef, foundRids, simpleDateFormat, context);
         }
         removeStaleTasks(doc, taskClassRef, foundRids);
+
+        // Re-serialize the XDOM back to wiki syntax to update macros content with rid.
+        WikiPrinter wikiPrinter = new DefaultWikiPrinter();
+        blockRenderer.render(xdom, wikiPrinter);
+        doc.setContent(wikiPrinter.toString());
     }
 
     private void processMacro(MacroBlock macro, XWikiDocument doc, DocumentReference taskClassRef,
@@ -164,7 +174,7 @@ public class TaskListener implements EventListener
         String rid = params.get(RID);
         if (StringUtils.isBlank(rid)) {
             rid = generateRID();
-            params.put(RID, rid);
+            macro.setParameter(RID, rid);
         }
         foundRids.add(rid);
 
@@ -180,10 +190,12 @@ public class TaskListener implements EventListener
         String responsible = params.getOrDefault(RESPONSIBLE, "");
         String macroDueDateStr = params.getOrDefault(DUE_DATE, "");
         Date macroDueDate = null;
-        try {
-            macroDueDate = simpleDateFormat.parse(macroDueDateStr);
-        } catch (ParseException e) {
-            logger.warn("Cannot parse the macro dueDate '{}'", macroDueDateStr, e);
+        if (StringUtils.isNotBlank(macroDueDateStr)) {
+            try {
+                macroDueDate = simpleDateFormat.parse(macroDueDateStr);
+            } catch (ParseException e) {
+                logger.warn("Cannot parse the macro dueDate '{}'", macroDueDateStr, e);
+            }
         }
 
         if (!Objects.equals(taskObj.getStringValue(TASK), task)
@@ -192,9 +204,7 @@ public class TaskListener implements EventListener
         {
             taskObj.setStringValue(TASK, task);
             taskObj.setLargeStringValue(RESPONSIBLE, responsible);
-            if (macroDueDate != null) {
-                taskObj.setDateValue(DUE_DATE, macroDueDate);
-            }
+            taskObj.setDateValue(DUE_DATE, macroDueDate);
         }
     }
 
@@ -208,8 +218,11 @@ public class TaskListener implements EventListener
     private void removeStaleTasks(XWikiDocument doc, DocumentReference taskClassRef, Set<String> validRids)
     {
         for (BaseObject obj : doc.getXObjects(taskClassRef)) {
-            if (!validRids.contains(obj.getStringValue(RID))) {
-                doc.removeXObject(obj);
+            if (obj != null) {
+                String rid = obj.getStringValue(RID);
+                if (rid == null || !validRids.contains(rid)) {
+                    doc.removeXObject(obj);
+                }
             }
         }
     }
@@ -217,7 +230,7 @@ public class TaskListener implements EventListener
     private String generateRID()
     {
         String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new SecureRandom();
+        Random random = new Random();
         StringBuilder prefix = new StringBuilder(3);
         for (int i = 0; i < 3; i++) {
             int index = random.nextInt(alphabet.length());
