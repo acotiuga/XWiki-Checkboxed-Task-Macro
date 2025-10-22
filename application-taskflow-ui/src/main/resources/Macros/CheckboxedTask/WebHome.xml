@@ -766,7 +766,7 @@ td[data-title=🗹]{
   &lt;label for="$rid" class="checktask-label" title="$title"&gt;
     $task
     #if ($hasDueDate || $hasResponsible)
-      &lt;span&gt;($services.localization.render('checktask.macro.toDo') $dueDateText #if($hasResponsible)$responsibleText {{mention reference="$responsible"/}})#end&lt;/span&gt;
+      &lt;span&gt;($services.localization.render('checktask.macro.toDo') $dueDateText #if($hasResponsible)$responsibleText#foreach($user in $responsible.split(',')) {{mention reference="$user.trim()"/}}#end#end)&lt;/span&gt;
     #end
   &lt;/label&gt;
 &lt;/span&gt;
@@ -893,7 +893,7 @@ td[data-title=🗹]{
       <name>responsible</name>
     </property>
     <property>
-      <type>org.xwiki.user.UserReference</type>
+      <type>org.xwiki.contrib.taskflow.internal.listener.UserReferenceList</type>
     </property>
   </object>
   <object>

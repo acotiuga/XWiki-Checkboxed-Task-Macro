@@ -168,7 +168,7 @@ public class TaskListener implements EventListener
         if (taskObj == null) {
             taskObj = doc.newXObject(taskClassRef, context);
             taskObj.setStringValue(RID, rid);
-            taskObj.setStringValue("done", "0");
+            taskObj.setIntValue("done", 1);
         }
 
         String task = macro.getContent().trim();
@@ -186,7 +186,7 @@ public class TaskListener implements EventListener
             || !Objects.equals(taskObj.getDateValue(DUE_DATE), macroDueDate))
         {
             taskObj.setStringValue(TASK, task);
-            taskObj.setStringValue(RESPONSIBLE, responsible);
+            taskObj.setLargeStringValue(RESPONSIBLE, responsible);
             if (macroDueDate != null) {
                 taskObj.setDateValue(DUE_DATE, macroDueDate);
             }
