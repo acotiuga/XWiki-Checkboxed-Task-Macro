@@ -22,7 +22,6 @@ package org.xwiki.contrib.taskflow.internal.listener;
 import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,9 +70,9 @@ import com.xpn.xwiki.objects.BaseObject;
 @Singleton
 public class TaskListener implements EventListener
 {
-    public static final String REMINDER_TIMES = "reminderTimes";
-
     protected static final String NAME = "TaskListener";
+
+    private static final String REMINDER_TIMES = "reminderTimes";
 
     private static final String TASK = "task";
 
@@ -187,8 +186,6 @@ public class TaskListener implements EventListener
             taskObj.setStringValue(RID, rid);
             taskObj.setIntValue("done", 1);
             taskObj.setLargeStringValue("creator", serializer.serialize(context.getUserReference()));
-            taskObj.setStringListValue(REMINDER_TIMES,
-                List.of(params.getOrDefault(REMINDER_TIMES, "").split(",")));
         }
 
         String task = macro.getContent().trim();
@@ -203,14 +200,10 @@ public class TaskListener implements EventListener
             }
         }
 
-        if (!Objects.equals(taskObj.getStringValue(TASK), task)
-            || !Objects.equals(taskObj.getStringValue(RESPONSIBLE), responsible)
-            || !Objects.equals(taskObj.getDateValue(DUE_DATE), macroDueDate))
-        {
-            taskObj.setStringValue(TASK, task);
-            taskObj.setLargeStringValue(RESPONSIBLE, responsible);
-            taskObj.setDateValue(DUE_DATE, macroDueDate);
-        }
+        taskObj.setStringListValue(REMINDER_TIMES, List.of(params.getOrDefault(REMINDER_TIMES, "").split(",")));
+        taskObj.setStringValue(TASK, task);
+        taskObj.setLargeStringValue(RESPONSIBLE, responsible);
+        taskObj.setDateValue(DUE_DATE, macroDueDate);
     }
 
     private void removeAllTasks(XWikiDocument doc, DocumentReference taskClassRef)
