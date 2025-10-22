@@ -188,8 +188,6 @@ public class TaskListener implements EventListener
             taskObj.setLargeStringValue("creator", serializer.serialize(context.getUserReference()));
         }
 
-        String task = macro.getContent().trim();
-        String responsible = params.getOrDefault(RESPONSIBLE, "");
         String macroDueDateStr = params.getOrDefault(DUE_DATE, "");
         Date macroDueDate = null;
         if (StringUtils.isNotBlank(macroDueDateStr)) {
@@ -199,11 +197,10 @@ public class TaskListener implements EventListener
                 logger.warn("Cannot parse the macro dueDate '{}'", macroDueDateStr, e);
             }
         }
-
-        taskObj.setStringListValue(REMINDER_TIMES, List.of(params.getOrDefault(REMINDER_TIMES, "").split(",")));
-        taskObj.setStringValue(TASK, task);
-        taskObj.setLargeStringValue(RESPONSIBLE, responsible);
         taskObj.setDateValue(DUE_DATE, macroDueDate);
+        taskObj.setStringListValue(REMINDER_TIMES, List.of(params.getOrDefault(REMINDER_TIMES, "").split(",")));
+        taskObj.setStringValue(TASK, macro.getContent());
+        taskObj.setLargeStringValue(RESPONSIBLE, params.getOrDefault(RESPONSIBLE, ""));
     }
 
     private void removeAllTasks(XWikiDocument doc, DocumentReference taskClassRef)
