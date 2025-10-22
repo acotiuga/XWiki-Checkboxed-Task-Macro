@@ -43,6 +43,7 @@ import org.xwiki.bridge.event.DocumentUpdatingEvent;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.DocumentReferenceResolver;
+import org.xwiki.model.reference.EntityReferenceSerializer;
 import org.xwiki.observation.EventListener;
 import org.xwiki.observation.event.Event;
 import org.xwiki.rendering.block.Block;
@@ -82,6 +83,9 @@ public class TaskListener implements EventListener
     @Inject
     @Named("current")
     private DocumentReferenceResolver<String> resolver;
+
+    @Inject
+    private EntityReferenceSerializer<String> serializer;
 
     @Inject
     private Logger logger;
@@ -169,6 +173,7 @@ public class TaskListener implements EventListener
             taskObj = doc.newXObject(taskClassRef, context);
             taskObj.setStringValue(RID, rid);
             taskObj.setIntValue("done", 1);
+            taskObj.setLargeStringValue("creator", serializer.serialize(context.getUserReference()));
         }
 
         String task = macro.getContent().trim();
