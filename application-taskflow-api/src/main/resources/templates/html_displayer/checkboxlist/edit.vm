@@ -25,7 +25,6 @@
   #end
 #end
 #set ($displayerName = $displayer.parameters.name)
-#set ($displayerValue = $displayer.parameters.value)
 #foreach ($entry in $map.entrySet())
   #set ($label = $entry.value.value)
   #set ($value = $entry.key)

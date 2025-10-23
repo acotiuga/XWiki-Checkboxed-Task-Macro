@@ -175,8 +175,8 @@ config['xwiki-macro'].insertButtons = [
 (function(l10n) {
   "use strict";
   //Ajax function: update task objects through page Task Updater.
-  require(['jquery'], function ($) {
-    if ($('#tasksLiveData').length == 0){
+  require(['jquery', 'xwiki-meta'], function ($, xm) {
+    if ($('#tasksLiveData').length == 0) {
       new XWiki.widgets.Notification(l10n['checktask.macro.hint'], 'info');
       var checkboxes = $('input[name="checktask"]');
 
@@ -201,6 +201,45 @@ config['xwiki-macro'].insertButtons = [
         }
       });
     }
+
+    // Update the checked status of the reminderTimes checkboxes in the Edit macro window with values from the xObject.
+    $(document).on('shown.bs.modal', '.modal.macro-editor-modal', function () {
+      const modal = $(this);
+      const checktaskMacro = modal.find('.macro-editor[data-macroid="checktask/xwiki/2.1"]');
+
+      if (checktaskMacro.length) {
+        var serviceURL = new XWiki.Document('MacroService', 'Macros.CheckboxedTask.Code').getURL('get', 'outputSyntax=plain');
+        const observer = new MutationObserver((mutations, obs) =&gt; {
+          const taskRidInput = checktaskMacro.find('input[name="rid"]');
+          if (taskRidInput.length) {
+            const taskRid = taskRidInput.val();
+            $.post({
+              url : serviceURL,
+              data: {
+                'taskRid': taskRid,
+                'taskDoc': xm.document
+              },
+            }).done(function(data) {
+              var reminderTimes = data.reminderTimes.split(',');
+              // Uncheck all reminderTimes checkboxes first
+              checktaskMacro.find('input[name="reminderTimes"][type="checkbox"]').prop('checked', false);
+
+              // Check only those whose value is in the reminderTimes array
+              reminderTimes.forEach(function (value) {
+                checktaskMacro.find(`input[name="reminderTimes"][value="${value}"]`).prop('checked', true);
+              });
+            }).fail(function(data) {
+              console.log(data);
+            });
+          };
+        });
+
+        observer.observe(checktaskMacro[0], {
+          childList: true,
+          subtree: true
+        });
+      }
+    });
   }); //end jquery
 }).apply(']]#', $jsontool.serialize([$l10n]));</code>
     </property>
