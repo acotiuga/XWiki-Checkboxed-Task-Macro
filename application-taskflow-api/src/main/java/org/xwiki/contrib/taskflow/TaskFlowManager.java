@@ -19,6 +19,9 @@
  */
 package org.xwiki.contrib.taskflow;
 
+import java.util.List;
+import java.util.Map;
+
 import org.xwiki.component.annotation.Role;
 import org.xwiki.model.reference.DocumentReference;
 
@@ -32,16 +35,23 @@ import org.xwiki.model.reference.DocumentReference;
 public interface TaskFlowManager
 {
     /**
+     * Retrieves a list of tasks that are due for reminder notifications.
+     *
+     * @return a map representing tasks to be reminded by hour intervals.
+     */
+    Map<String, Map<DocumentReference, Map<DocumentReference, List<String>>>> getTasksToRemind();
+
+    /**
      * Sends a notification to a responsible user about a specific task.
      *
      * @param taskRef the reference to the task document that requires attention
      * @param userRef the reference to the user who is responsible for the task
-     * @param taskContent the content of the task within the document
-     * @param taskCreator the user that created the task
-     * @param taskUrl the url of the task
+     * @param eventType the type of event
+     * @param taskEventParams extra parameters of the event
+     *
      */
-    void notifyResponsibleUser(DocumentReference taskRef, DocumentReference userRef, String taskContent,
-        String taskCreator, String taskUrl);
+    void notifyResponsibleUser(DocumentReference taskRef, DocumentReference userRef, String eventType, Map<String,
+        String> taskEventParams);
 
     /**
      * Generates a unique identifier (RID) for a task or object.

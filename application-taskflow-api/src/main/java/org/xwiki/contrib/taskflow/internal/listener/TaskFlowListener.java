@@ -20,30 +20,22 @@
 package org.xwiki.contrib.taskflow.internal.listener;
 
 import java.io.StringReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.xwiki.bridge.event.DocumentCreatingEvent;
 import org.xwiki.bridge.event.DocumentUpdatingEvent;
 import org.xwiki.component.annotation.Component;
-import org.xwiki.contrib.taskflow.TaskFlowManager;
+import org.xwiki.contrib.taskflow.internal.TaskMacroProcessor;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.DocumentReferenceResolver;
-import org.xwiki.model.reference.EntityReferenceSerializer;
 import org.xwiki.observation.EventListener;
 import org.xwiki.observation.event.Event;
 import org.xwiki.rendering.block.Block;
@@ -56,7 +48,6 @@ import org.xwiki.rendering.renderer.printer.DefaultWikiPrinter;
 import org.xwiki.rendering.renderer.printer.WikiPrinter;
 
 import com.xpn.xwiki.XWikiContext;
-import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
 
@@ -73,27 +64,13 @@ public class TaskFlowListener implements EventListener
 {
     protected static final String NAME = "TaskFlowListener";
 
-    private static final String REMINDER_TIMES = "reminderTimes";
-
-    private static final String TASK = "task";
-
     private static final String RID = "rid";
 
     private static final List<Event> EVENTS = List.of(new DocumentCreatingEvent(), new DocumentUpdatingEvent());
 
-    private static final String RESPONSIBLE = "responsible";
-
-    private static final String DUE_DATE = "dueDate";
-
-    @Inject
-    private TaskFlowManager taskFlowManager;
-
     @Inject
     @Named("current")
     private DocumentReferenceResolver<String> resolver;
-
-    @Inject
-    private EntityReferenceSerializer<String> serializer;
 
     @Inject
     private Logger logger;
@@ -105,6 +82,9 @@ public class TaskFlowListener implements EventListener
     @Inject
     @Named("xwiki/2.1")
     private BlockRenderer blockRenderer;
+
+    @Inject
+    private TaskMacroProcessor macroProcessor;
 
     @Override
     public List<Event> getEvents()
@@ -162,7 +142,7 @@ public class TaskFlowListener implements EventListener
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
         for (MacroBlock macro : macros) {
-            processMacro(macro, doc, taskClassRef, foundRids, simpleDateFormat, context);
+            macroProcessor.processMacro(macro, doc, taskClassRef, foundRids, simpleDateFormat, context);
         }
         removeStaleTasks(doc, taskClassRef, foundRids);
 
@@ -170,56 +150,6 @@ public class TaskFlowListener implements EventListener
         WikiPrinter wikiPrinter = new DefaultWikiPrinter();
         blockRenderer.render(xdom, wikiPrinter);
         doc.setContent(wikiPrinter.toString());
-    }
-
-    private void processMacro(MacroBlock macro, XWikiDocument doc, DocumentReference taskClassRef,
-        Set<String> foundRids, SimpleDateFormat simpleDateFormat, XWikiContext context) throws XWikiException
-    {
-        Map<String, String> params = new HashMap<>(macro.getParameters());
-
-        String rid = params.get(RID);
-        if (StringUtils.isBlank(rid)) {
-            rid = taskFlowManager.generateRID();
-            macro.setParameter(RID, rid);
-        }
-        foundRids.add(rid);
-
-        BaseObject taskObj = doc.getXObject(taskClassRef, RID, rid);
-        String taskCreator = serializer.serialize(context.getUserReference());
-        boolean sendNotification = false;
-        if (taskObj == null) {
-            taskObj = doc.newXObject(taskClassRef, context);
-            taskObj.setStringValue(RID, rid);
-            taskObj.setIntValue("done", 1);
-            taskObj.setLargeStringValue("creator", taskCreator);
-            sendNotification = true;
-        }
-
-        String macroDueDateStr = params.getOrDefault(DUE_DATE, "");
-        Date macroDueDate = null;
-        if (StringUtils.isNotBlank(macroDueDateStr)) {
-            try {
-                macroDueDate = simpleDateFormat.parse(macroDueDateStr);
-            } catch (ParseException e) {
-                logger.warn("Cannot parse the macro dueDate '{}'", macroDueDateStr, e);
-            }
-        }
-        String taskContent = macro.getContent();
-        taskObj.setDateValue(DUE_DATE, macroDueDate);
-        taskObj.setStringListValue(REMINDER_TIMES, List.of(params.getOrDefault(REMINDER_TIMES, "").split(",")));
-        taskObj.setStringValue(TASK, macro.getContent());
-        String responsible = params.getOrDefault(RESPONSIBLE, "");
-        List<DocumentReference> responsibleUsers =
-            Arrays.stream(responsible.split(",")).map(String::trim).filter(s -> !s.isEmpty())
-                .map(resolver::resolve).collect(Collectors.toList());
-        taskObj.setLargeStringValue(RESPONSIBLE, responsible);
-        if (sendNotification) {
-            String taskUrl = doc.getExternalURL("view", context) + "#" + rid;
-            for (DocumentReference responsibleUser : responsibleUsers) {
-                taskFlowManager.notifyResponsibleUser(doc.getDocumentReference(), responsibleUser, taskContent,
-                    taskCreator, taskUrl);
-            }
-        }
     }
 
     private void removeAllTasks(XWikiDocument doc, DocumentReference taskClassRef)

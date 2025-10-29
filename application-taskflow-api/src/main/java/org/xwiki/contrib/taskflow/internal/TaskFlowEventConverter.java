@@ -29,7 +29,9 @@ import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
+import org.xwiki.contrib.taskflow.notifications.events.AbstractTaskFlowEvent;
 import org.xwiki.contrib.taskflow.notifications.events.TaskFlowAssignedEvent;
+import org.xwiki.contrib.taskflow.notifications.events.TaskFlowExpiringEvent;
 import org.xwiki.eventstream.Event;
 import org.xwiki.eventstream.RecordableEvent;
 import org.xwiki.eventstream.RecordableEventConverter;
@@ -62,11 +64,8 @@ public class TaskFlowEventConverter implements RecordableEventConverter
     @Override
     public Event convert(RecordableEvent recordableEvent, String source, Object data) throws Exception
     {
-        TaskFlowAssignedEvent taskEvent = (TaskFlowAssignedEvent) recordableEvent;
-        Map<String, Object> taskEventExtraParams = new HashMap<>();
-        taskEventExtraParams.put("taskContent", taskEvent.getTaskContent());
-        taskEventExtraParams.put("taskCreator", taskEvent.getTaskCreator());
-        taskEventExtraParams.put("taskUrl", taskEvent.getTaskUrl());
+        AbstractTaskFlowEvent taskEvent = (AbstractTaskFlowEvent) recordableEvent;
+        Map<String, Object> taskEventExtraParams = new HashMap<>(taskEvent.getTaskEventParams());
 
         Event convertedEvent = defaultConverter.convert(recordableEvent, source, data);
 
@@ -78,7 +77,7 @@ public class TaskFlowEventConverter implements RecordableEventConverter
     @Override
     public List<RecordableEvent> getSupportedEvents()
     {
-        return List.of(new TaskFlowAssignedEvent());
+        return List.of(new TaskFlowAssignedEvent(), new TaskFlowExpiringEvent());
     }
 
     /**

@@ -93,10 +93,15 @@ reportchecktasks.table.task=Aufgabe
 reportchecktasks.table.responsible=Verantwortlich
 reportchecktasks.table.dueDate=Fällig
 
-TaskFlow.event.assign.name=Aufgaben mit Kontrollkästchen
+TaskFlow.event.name=Aufgaben mit Kontrollkästchen
 TaskFlow.event.assign.description=Eine Aufgabe wurde zugewiesen
+TaskFlow.event.expiring.description=Eine Aufgabe muss erledigt werden
 notifications.events.taskAssignedEvent.summary.singular=Es wurde eine Aufgabe für Sie erstellt.
 notifications.events.taskAssignedEvent.summary.plural=Es wurden {0} Aufgaben für Sie erstellt.
 notifications.events.taskAssignedEvent.description=eine {0}Aufgabe{1} für Sie erstellt
-notifications.events.taskAssignedEvent.email.description={0} hat eine Aufgabe für Sie erstellt: {1}.</content>
+notifications.events.taskAssignedEvent.email.description={0} hat eine Aufgabe für Sie erstellt: {1}.
+notifications.events.taskExpiringEvent.summary.singular=Dir ist eine fällige Aufgabe zugewiesen.
+notifications.events.taskExpiringEvent.summary.plural=Dir sind {0} fällige Aufgaben zugewiesen.
+notifications.events.taskExpiringEvent.description=Die Frist für die {0}Aufgabe{1} nähert sich: {2}
+notifications.events.taskExpiringEvent.email.description=Die Frist für die Aufgabe {0} nähert sich: {1}.</content>
 </xwikidoc>

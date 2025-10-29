@@ -28,11 +28,10 @@
       #set ($taskContent = $taskEventBody.taskContent)
       #set ($taskCreator = $services.model.resolveDocument($taskEventBody.taskCreator))
       #set ($taskUrl = $taskEventBody.taskUrl)
-      #set ($translationParameters = ["<a href='$taskUrl' title='$taskContent'>", "</a>"])
-      #set ($description = $services.localization.render('notifications.events.taskAssignedEvent.description', $translationParameters))
-      #set ($notificationLink = "$taskContent")
+      #set ($taskDueDate = $taskEventBody.taskDueDate)
+      #set ($translationParameters = ["<a href='$taskUrl' title='$taskContent'>", "</a>", $taskDueDate])
+      #set ($description = $services.localization.render('notifications.events.taskExpiringEvent.description', $translationParameters))
       <tr>
-        <td>#displayNotificationEventUser($taskCreator, false)</td>
         <td class="description">$description</td>
         <td class="text-right text-muted">$escapetool.xml($services.date.displayTimeAgo($event.date))</td>
       </tr>
@@ -68,9 +67,9 @@
     </div>
     <div class="notification-description">
       #if ($compositeEvent.events.size() == 1)
-        $services.localization.render('notifications.events.taskAssignedEvent.summary.singular')
+        $services.localization.render('notifications.events.taskExpiringEvent.summary.singular')
       #else
-        $services.localization.render('notifications.events.taskAssignedEvent.summary.plural', [$compositeEvent.events.size()])
+        $services.localization.render('notifications.events.taskExpiringEvent.summary.plural', [$compositeEvent.events.size()])
       #end
       <div><small class="text-muted">$compositeEventDate</small></div>
     </div>

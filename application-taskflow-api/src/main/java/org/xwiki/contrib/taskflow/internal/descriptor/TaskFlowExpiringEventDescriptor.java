@@ -23,24 +23,24 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
-import org.xwiki.contrib.taskflow.notifications.events.TaskFlowAssignedEvent;
+import org.xwiki.contrib.taskflow.notifications.events.TaskFlowExpiringEvent;
 import org.xwiki.eventstream.RecordableEventDescriptor;
 
 /**
- * Descriptor related to the event {@link TaskFlowAssignedEvent}.
+ * Descriptor related to the event {@link TaskFlowExpiringEvent}.
  *
  * @version $Id$
  * @since 2.0
  */
 @Component
 @Singleton
-@Named("org.xwiki.contrib.taskflow.notifications.events.TaskFlowAssignedEvent")
-public class TaskFlowAssignedEventDescriptor implements RecordableEventDescriptor
+@Named("org.xwiki.contrib.taskflow.notifications.events.TaskFlowExpiringEvent")
+public class TaskFlowExpiringEventDescriptor implements RecordableEventDescriptor
 {
     @Override
     public String getEventType()
     {
-        return TaskFlowAssignedEvent.class.getCanonicalName();
+        return TaskFlowExpiringEvent.class.getCanonicalName();
     }
 
     @Override
@@ -52,12 +52,12 @@ public class TaskFlowAssignedEventDescriptor implements RecordableEventDescripto
     @Override
     public String getDescription()
     {
-        return "TaskFlow.event.assign.description";
+        return "TaskFlow.event.expiring.description";
     }
 
     @Override
     public String getApplicationIcon()
     {
-        return "check";
+        return "exclamation";
     }
 }

@@ -19,9 +19,15 @@
  */
 package org.xwiki.contrib.taskflow.internal.job;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.xpn.xwiki.XWiki;
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.plugin.scheduler.AbstractJob;
 import com.xpn.xwiki.web.Utils;
 
@@ -49,12 +55,17 @@ import org.xwiki.model.reference.DocumentReference;
  * @version $Id$
  * @since 2.0
  */
-public class TaskReminderSchedulerJob extends AbstractJob implements Job
+public class TaskFlowReminderSchedulerJob extends AbstractJob implements Job
 {
     @Override
     protected void executeJob(JobExecutionContext jobContext) throws JobExecutionException
     {
-        Logger logger = LoggerFactory.getLogger(TaskReminderSchedulerJob.class);
+        XWikiContext context = getXWikiContext();
+        XWiki xwiki = context.getWiki();
+
+        DocumentReference taskClassRef =
+            new DocumentReference(context.getWikiId(), List.of("Macros", "CheckboxedTask", "Code"), "TaskClass");
+        Logger logger = LoggerFactory.getLogger(TaskFlowReminderSchedulerJob.class);
         TaskFlowManager taskFlowManager = Utils.getComponent(TaskFlowManager.class);
         logger.debug("Task Reminder Scheduler Job started ...");
         // interval → user → document → list of task IDs
@@ -63,7 +74,6 @@ public class TaskReminderSchedulerJob extends AbstractJob implements Job
         // Send one notification/email per event interval → user → document → list of task IDs.
         for (Map.Entry<String, Map<DocumentReference,
             Map<DocumentReference, List<String>>>> tasksToRemindEntry : tasksToRemindMap.entrySet()) {
-            String interval = tasksToRemindEntry.getKey();
             Map<DocumentReference, Map<DocumentReference, List<String>>> taskUserMap = tasksToRemindEntry.getValue();
             for (Map.Entry<DocumentReference,
                 Map<DocumentReference, List<String>>> taskUserEntry : taskUserMap.entrySet()) {
@@ -71,9 +81,23 @@ public class TaskReminderSchedulerJob extends AbstractJob implements Job
                 Map<DocumentReference, List<String>> taskRefMap = taskUserEntry.getValue();
                 for (Map.Entry<DocumentReference, List<String>> taskRefEntry : taskRefMap.entrySet()) {
                     DocumentReference taskRef = taskRefEntry.getKey();
-                    List<String> taskRids = taskRefEntry.getValue();
-                    for (String taskRid : taskRids) {
-                        taskFlowManager.notifyResponsibleUser(taskRef, userRef, taskRid, "taskCreator");
+                    try {
+                        XWikiDocument taskDoc = xwiki.getDocument(taskRef, context);
+                        List<String> taskRids = taskRefEntry.getValue();
+                        for (String taskRid : taskRids) {
+                            BaseObject taskObj = taskDoc.getXObject(taskClassRef, "rid", taskRid);
+                            String taskUrl = taskDoc.getExternalURL("view", context) + "#" + taskRid;
+                            Map<String, String> taskEventParams = new HashMap<>();
+                            taskEventParams.put("taskContent", taskObj.getStringValue("task"));
+                            taskEventParams.put("taskCreator", taskObj.getStringValue("creator"));
+                            taskEventParams.put("taskUrl", taskUrl);
+                            taskEventParams.put("taskDueDate", xwiki.formatDate(taskObj.getDateValue("dueDate"),
+                                "yyyy/MM/dd HH:mm", context));
+
+                            taskFlowManager.notifyResponsibleUser(taskRef, userRef, "expiring", taskEventParams);
+                        }
+                    } catch (XWikiException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }

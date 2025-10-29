@@ -22,36 +22,54 @@ package org.xwiki.contrib.taskflow.notifications.events;
 import java.util.Map;
 import java.util.Set;
 
+import org.xwiki.eventstream.RecordableEvent;
+import org.xwiki.eventstream.TargetableEvent;
+
 /**
  * Task Assigned event. Notify responsible user about the assigned task.
  *
  * @version $Id$
  * @since 2.0
  */
-public class TaskFlowAssignedEvent extends AbstractTaskFlowEvent
+public abstract class AbstractTaskFlowEvent implements RecordableEvent, TargetableEvent
 {
+    private Set<String> target;
+
+    private Map<String, String> taskEventParams;
+
     /**
-     * Constructs a {@code TaskFlowAssignedEvent} with the specified target users and task parameters.
-     *
-     * @param target a set of user identifiers to whom the event is targeted
-     * @param taskEventParams a map containing parameters related to the task event, such as task ID, title, or deadline
+     * The default non-arguments constructor.
      */
-    public TaskFlowAssignedEvent(Set<String> target, Map<String, String> taskEventParams)
+    public AbstractTaskFlowEvent()
     {
-        super(target, taskEventParams);
     }
 
     /**
-     * Constructs an empty {@code TaskFlowAssignedEvent} with no target or parameters.
-     * This constructor may be used for deserialization or manual population of event data.
+     * Create a new instance with the given data.
+     *
+     * @param target the list of users targeted by the event.
+     * @param taskEventParams extra parameters of the event.
      */
-    public TaskFlowAssignedEvent()
+    public AbstractTaskFlowEvent(Set<String> target, Map<String, String> taskEventParams)
     {
+        this.target = target;
+        this.taskEventParams = taskEventParams;
     }
 
     @Override
-    public boolean matches(Object otherEvent)
+    public Set<String> getTarget()
     {
-        return otherEvent instanceof TaskFlowAssignedEvent;
+        return this.target;
     }
+
+    /**
+     * @return the extra parameters of the event.
+     */
+    public Map<String, String> getTaskEventParams()
+    {
+        return this.taskEventParams;
+    }
+
+    @Override
+    public abstract boolean matches(Object otherEvent);
 }

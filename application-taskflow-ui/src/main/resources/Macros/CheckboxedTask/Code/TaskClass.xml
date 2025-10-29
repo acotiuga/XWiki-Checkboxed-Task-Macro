@@ -123,6 +123,31 @@
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
     </protected>
+    <reminderTimes>
+      <cache>0</cache>
+      <customDisplay/>
+      <defaultValue/>
+      <disabled>0</disabled>
+      <displayType>checkbox</displayType>
+      <freeText/>
+      <hint/>
+      <largeStorage>0</largeStorage>
+      <multiSelect>1</multiSelect>
+      <name>reminderTimes</name>
+      <number>8</number>
+      <picker>1</picker>
+      <prettyName>Reminder times</prettyName>
+      <relationalStorage>0</relationalStorage>
+      <separator> </separator>
+      <separators>|, </separators>
+      <size>1</size>
+      <sort/>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <values>h1=1 hour|h2=2 hours|h4=4 hours|h8=8 hours|h12=12 hours|d1=1 day|d2=2 days|d5=5 days</values>
+      <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+    </reminderTimes>
     <responsible>
       <cache>0</cache>
       <customDisplay/>

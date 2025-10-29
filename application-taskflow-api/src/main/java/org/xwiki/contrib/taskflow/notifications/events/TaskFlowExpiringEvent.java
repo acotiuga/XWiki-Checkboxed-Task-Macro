@@ -23,35 +23,35 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Task Assigned event. Notify responsible user about the assigned task.
+ * Task Expiring event. Notify responsible user about the reminding time to complete the task.
  *
  * @version $Id$
  * @since 2.0
  */
-public class TaskFlowAssignedEvent extends AbstractTaskFlowEvent
+public class TaskFlowExpiringEvent extends AbstractTaskFlowEvent
 {
     /**
-     * Constructs a {@code TaskFlowAssignedEvent} with the specified target users and task parameters.
+     * Constructs a {@code TaskFlowExpiringEvent} with the specified target users and task parameters.
      *
      * @param target a set of user identifiers to whom the event is targeted
      * @param taskEventParams a map containing parameters related to the task event, such as task ID, title, or deadline
      */
-    public TaskFlowAssignedEvent(Set<String> target, Map<String, String> taskEventParams)
+    public TaskFlowExpiringEvent(Set<String> target, Map<String, String> taskEventParams)
     {
         super(target, taskEventParams);
     }
 
     /**
-     * Constructs an empty {@code TaskFlowAssignedEvent} with no target or parameters.
+     * Constructs an empty {@code TaskFlowExpiringEvent} with no target or parameters.
      * This constructor may be used for deserialization or manual population of event data.
      */
-    public TaskFlowAssignedEvent()
+    public TaskFlowExpiringEvent()
     {
     }
 
     @Override
     public boolean matches(Object otherEvent)
     {
-        return otherEvent instanceof TaskFlowAssignedEvent;
+        return otherEvent instanceof TaskFlowExpiringEvent;
     }
 }
