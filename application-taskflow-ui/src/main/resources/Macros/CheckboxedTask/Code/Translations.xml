@@ -97,7 +97,7 @@ TaskFlow.event.assign.name=Checkboxed Tasks
 TaskFlow.event.assign.description=A task is assigned
 notifications.events.taskAssignedEvent.summary.singular=There is one task created for you.
 notifications.events.taskAssignedEvent.summary.plural=There are {0} tasks created for you.
-notifications.events.taskAssignedEvent.description=has created a task for you
+notifications.events.taskAssignedEvent.description=created a {0}task{1} for you
 notifications.events.taskAssignedEvent.email.description={0} has created a task for you: {1}.</content>
   <object>
     <name>Macros.CheckboxedTask.Code.Translations</name>

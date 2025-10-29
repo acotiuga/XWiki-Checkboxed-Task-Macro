@@ -20,34 +20,21 @@
 ## Renders the Task Flow notifications.
 #template('notification/macros.vm')
 
-#macro (insertEventDate $event)
-<td class="text-right text-muted">$escapetool.xml($services.date.displayTimeAgo($event.date))</td>
-#end
-
 #macro(displayTaskFlowNotificationEventDetails $compositeEvent)
   #set ($compositeEventType = $compositeEvent.type)
   #define ($rows)
     #foreach ($event in $compositeEvent.events)
-      #set ($description = $services.localization.render('notifications.events.taskAssignedEvent.description'))
       #set ($taskEventBody = $jsontool.fromString($event.body))
       #set ($taskContent = $taskEventBody.taskContent)
-      #set ($username = $event.user.name)
-      #set ($eventParams = $compositeEventParams.get($event))
+      #set ($taskCreator = $services.model.resolveDocument($taskEventBody.taskCreator))
+      #set ($taskUrl = $taskEventBody.taskUrl)
+      #set ($translationParameters = ["<a href='$taskUrl' target='_blank', title='$taskContent'>", "</a>"])
+      #set ($description = $services.localization.render('notifications.events.taskAssignedEvent.description', $translationParameters))
+      #set ($notificationLink = "$taskContent")
       <tr>
-        <td>
-          <span class="notification-event-user">
-            <a href="$eventParams.getAuthorURL()">$username</a>
-          </span>
-        </td>
+        <td>#displayNotificationEventUser($taskCreator, false)</td>
         <td class="description">$description</td>
-        #insertEventDate($event)
-      </tr>
-      <tr>
-        <td colspan="3">
-          <blockquote class="mention-quote">
-            $taskContent
-          </blockquote>
-        </td>
+        <td class="text-right text-muted">$escapetool.xml($services.date.displayTimeAgo($event.date))</td>
       </tr>
     #end
   #end
