@@ -91,5 +91,12 @@ reportchecktasks.table.done=Erledigt
 reportchecktasks.table.page=Seite
 reportchecktasks.table.task=Aufgabe
 reportchecktasks.table.responsible=Verantwortlich
-reportchecktasks.table.dueDate=Fällig</content>
+reportchecktasks.table.dueDate=Fällig
+
+TaskFlow.event.assign.name=Aufgaben mit Kontrollkästchen
+TaskFlow.event.assign.description=Eine Aufgabe wurde zugewiesen
+notifications.events.taskAssignedEvent.summary.singular=Es wurde eine Aufgabe für Sie erstellt.
+notifications.events.taskAssignedEvent.summary.plural=Es wurden {0} Aufgaben für Sie erstellt.
+notifications.events.taskAssignedEvent.description=hat eine Aufgabe für Sie erstellt
+notifications.events.taskAssignedEvent.email.description={0} hat eine Aufgabe für Sie erstellt: {1}.</content>
 </xwikidoc>

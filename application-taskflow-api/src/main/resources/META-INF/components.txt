@@ -1,1 +1,4 @@
-org.xwiki.contrib.taskflow.internal.listener.TaskListener
+org.xwiki.contrib.taskflow.internal.DefaultTaskFlowManager
+org.xwiki.contrib.taskflow.internal.TaskFlowEventConverter
+org.xwiki.contrib.taskflow.internal.descriptor.TaskFlowAssignedEventDescriptor
+org.xwiki.contrib.taskflow.internal.listener.TaskFlowListener

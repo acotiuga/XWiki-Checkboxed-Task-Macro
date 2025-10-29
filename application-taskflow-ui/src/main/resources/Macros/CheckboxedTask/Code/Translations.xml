@@ -91,7 +91,14 @@ reportchecktasks.table.done=Completed
 reportchecktasks.table.page=Page
 reportchecktasks.table.task=Task
 reportchecktasks.table.responsible=Responsible
-reportchecktasks.table.dueDate=Due date</content>
+reportchecktasks.table.dueDate=Due date
+
+TaskFlow.event.assign.name=Checkboxed Tasks
+TaskFlow.event.assign.description=A task is assigned
+notifications.events.taskAssignedEvent.summary.singular=There is one task created for you.
+notifications.events.taskAssignedEvent.summary.plural=There are {0} tasks created for you.
+notifications.events.taskAssignedEvent.description=has created a task for you
+notifications.events.taskAssignedEvent.email.description={0} has created a task for you: {1}.</content>
   <object>
     <name>Macros.CheckboxedTask.Code.Translations</name>
     <number>0</number>

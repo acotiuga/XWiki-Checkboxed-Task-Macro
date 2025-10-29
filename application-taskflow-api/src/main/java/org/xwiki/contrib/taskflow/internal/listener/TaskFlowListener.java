@@ -22,14 +22,14 @@ package org.xwiki.contrib.taskflow.internal.listener;
 import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.xwiki.bridge.event.DocumentCreatingEvent;
 import org.xwiki.bridge.event.DocumentUpdatingEvent;
 import org.xwiki.component.annotation.Component;
+import org.xwiki.contrib.taskflow.TaskFlowManager;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.model.reference.EntityReferenceSerializer;
@@ -66,11 +67,11 @@ import com.xpn.xwiki.objects.BaseObject;
  * @since 2.0
  */
 @Component
-@Named(TaskListener.NAME)
+@Named(TaskFlowListener.NAME)
 @Singleton
-public class TaskListener implements EventListener
+public class TaskFlowListener implements EventListener
 {
-    protected static final String NAME = "TaskListener";
+    protected static final String NAME = "TaskFlowListener";
 
     private static final String REMINDER_TIMES = "reminderTimes";
 
@@ -83,6 +84,9 @@ public class TaskListener implements EventListener
     private static final String RESPONSIBLE = "responsible";
 
     private static final String DUE_DATE = "dueDate";
+
+    @Inject
+    private TaskFlowManager taskFlowManager;
 
     @Inject
     @Named("current")
@@ -175,17 +179,20 @@ public class TaskListener implements EventListener
 
         String rid = params.get(RID);
         if (StringUtils.isBlank(rid)) {
-            rid = generateRID();
+            rid = taskFlowManager.generateRID();
             macro.setParameter(RID, rid);
         }
         foundRids.add(rid);
 
         BaseObject taskObj = doc.getXObject(taskClassRef, RID, rid);
+        String taskCreator = serializer.serialize(context.getUserReference());
+        boolean sendNotification = false;
         if (taskObj == null) {
             taskObj = doc.newXObject(taskClassRef, context);
             taskObj.setStringValue(RID, rid);
             taskObj.setIntValue("done", 1);
-            taskObj.setLargeStringValue("creator", serializer.serialize(context.getUserReference()));
+            taskObj.setLargeStringValue("creator", taskCreator);
+            sendNotification = true;
         }
 
         String macroDueDateStr = params.getOrDefault(DUE_DATE, "");
@@ -197,10 +204,22 @@ public class TaskListener implements EventListener
                 logger.warn("Cannot parse the macro dueDate '{}'", macroDueDateStr, e);
             }
         }
+        String taskContent = macro.getContent();
         taskObj.setDateValue(DUE_DATE, macroDueDate);
         taskObj.setStringListValue(REMINDER_TIMES, List.of(params.getOrDefault(REMINDER_TIMES, "").split(",")));
         taskObj.setStringValue(TASK, macro.getContent());
-        taskObj.setLargeStringValue(RESPONSIBLE, params.getOrDefault(RESPONSIBLE, ""));
+        String responsible = params.getOrDefault(RESPONSIBLE, "");
+        List<DocumentReference> responsibleUsers =
+            Arrays.stream(responsible.split(",")).map(String::trim).filter(s -> !s.isEmpty())
+                .map(resolver::resolve).collect(Collectors.toList());
+        taskObj.setLargeStringValue(RESPONSIBLE, responsible);
+        if (sendNotification) {
+            String taskUrl = doc.getExternalURL("view", context) + "#" + rid;
+            for (DocumentReference responsibleUser : responsibleUsers) {
+                taskFlowManager.notifyResponsibleUser(doc.getDocumentReference(), responsibleUser, taskContent,
+                    taskCreator, taskUrl);
+            }
+        }
     }
 
     private void removeAllTasks(XWikiDocument doc, DocumentReference taskClassRef)
@@ -220,17 +239,5 @@ public class TaskListener implements EventListener
                 }
             }
         }
-    }
-
-    private String generateRID()
-    {
-        String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuilder prefix = new StringBuilder(3);
-        for (int i = 0; i < 3; i++) {
-            int index = random.nextInt(alphabet.length());
-            prefix.append(alphabet.charAt(index));
-        }
-        return prefix.append("-").append(System.currentTimeMillis()).toString();
     }
 }
