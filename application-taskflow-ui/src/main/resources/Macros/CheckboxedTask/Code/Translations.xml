@@ -106,7 +106,10 @@ notifications.events.taskAssignedEvent.email.description={0} has created a task 
 notifications.events.taskExpiringEvent.summary.singular=There is one due task assigned to you.
 notifications.events.taskExpiringEvent.summary.plural=There are {0} due tasks assigned to you.
 notifications.events.taskExpiringEvent.description=The deadline of the {0}task{1} is approaching: {2}
-notifications.events.taskExpiringEvent.email.description=The deadline of the task {0} is approaching: {1}.</content>
+notifications.events.taskExpiringEvent.email.description=The deadline of the task {0} is approaching: {1}.
+
+checktask.macro.panel.myTasks.name=My tasks
+checktask.macro.panel.myTasks.allTasks.label=See all tasks</content>
   <object>
     <name>Macros.CheckboxedTask.Code.Translations</name>
     <number>0</number>

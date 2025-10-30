@@ -107,5 +107,8 @@ notifications.events.taskAssignedEvent.email.description={0} hat eine Aufgabe f�
 notifications.events.taskExpiringEvent.summary.singular=Dir ist eine f채llige Aufgabe zugewiesen.
 notifications.events.taskExpiringEvent.summary.plural=Dir sind {0} f채llige Aufgaben zugewiesen.
 notifications.events.taskExpiringEvent.description=Die Frist f체r die {0}Aufgabe{1} n채hert sich: {2}
-notifications.events.taskExpiringEvent.email.description=Die Frist f체r die Aufgabe {0} n채hert sich: {1}.</content>
+notifications.events.taskExpiringEvent.email.description=Die Frist f체r die Aufgabe {0} n채hert sich: {1}.
+
+checktask.macro.panel.myTasks.name=Meine Aufgaben
+checktask.macro.panel.myTasks.allTasks.label=Alle Aufgaben anzeigen</content>
 </xwikidoc>
