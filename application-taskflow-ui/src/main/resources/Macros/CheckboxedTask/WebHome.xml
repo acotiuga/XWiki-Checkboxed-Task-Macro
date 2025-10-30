@@ -36,40 +36,23 @@
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
-  <content>This macro adds a checkboxed **task with checkbox** macro and an event listener for ticking completed tasks off using the checkboxes
+  <content>{{velocity}}
+#set ($discard = $xwiki.ssfx.use('js/xwiki/table/table.css'))
+#set ($discard = $xwiki.jsfx.use('js/xwiki/table/tablefilterNsort.js', true))
+#set ($statement = 'from doc.object(Macros.CheckboxedTask.Code.TaskClass) task')
+#set ($results = $services.query.xwql($statement).addFilter('unique').execute())
+(% class="sortable filterable doOddEven" id="taskEntries" %)
+(% class="sortHeader" style="text-align:center;" %)|=Page|=Task|=Creator|=Responsible|=Due date
+#foreach ($result in $results)
+  #set ($taskDoc = $xwiki.getDocument($result))
+  #foreach ($taskObj in $taskDoc.getObjects('Macros.CheckboxedTask.Code.TaskClass'))
+    |[[$taskDoc.title&gt;&gt;$result]]|[[$taskObj.task&gt;&gt;$result||anchor="$taskObj.rid"]]|$taskObj.creator|$taskObj.responsible|$taskObj.dueDate
+  #end
+#end
+{{/velocity}}
 
-**Example:**
 
-{{checktask dueDate="31.12.2022, 23:59:59"}}
-Description of task to be done
-{{/checktask}}
-
-**CKEditor:**
-
-In order to make best use of it, add the following CKeditor configuration to your editor through the [[dedicated "WYSIWYG Editor" section&gt;&gt;url:https://extensions.xwiki.org/xwiki/bin/view/Extension/CKEditor%20Integration/#HAdministrationSection]] in the [[Wiki Administration&gt;&gt;url:https://extensions.xwiki.org/xwiki/bin/view/Extension/Administration%20Application]]:
-
-{{code language="javascript" layout="LINENUMBERS"}}
-config['xwiki-macro'] = config['xwiki-macro'] || {};
-config['xwiki-macro'].insertButtons = [
-  {
-    insertDirectly: false,
-    macroCall: {
-      name:'checktask',
-      inline:'enforce',
-    }
-  }
-];
-{{/code}}
-
-**Macros and components:**
-
-* [[Checkboxed Task&gt;&gt;CheckboxedTask]]: Contains the **checktask **macro that inserts checkboxed tasks in pages and a JavaScript listener that listens for checking/unchecking events
-* [[Task Listener&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskListener]]: Event listener that listens for creating and updating tasks on pages, adding XObjects to the respective pages
-* [[Task Updater&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskUpdater]]: Is called by the JavaScript listener to update the XObject of a task when checked or unchecked
-* [[Task Class&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskClass]]: XObject class that defines the properties of tasks to be saved
-* [[Task Report Macro&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskReportMacro]]: Contains the macro **reportchecktasks **that inserts a task report in pages using the default **live data** macro. Also contains another JavaScript listener listening for checking/unchecking events within the live data table.
-* [[Task JSON&gt;&gt;doc:Macros.CheckboxedTask.Code.TaskJSON]]: Defines the database query and formats the input for the live data macro in the task report
-* [[Translations&gt;&gt;doc:.Code.Translations]]: Contains the localized labels of the task and task report macros</content>
+</content>
   <object>
     <name>Macros.CheckboxedTask.WebHome</name>
     <number>0</number>
