@@ -52,15 +52,16 @@
 #foreach ($result in $results)
   #set ($taskDoc = $xwiki.getDocument($result))
   #foreach ($taskObj in $taskDoc.getObjects('Macros.CheckboxedTask.Code.TaskClass'))
-    #set ($taskDone = $taskObj.getValue('done') == 1)
-    #set ($taskDoneDisplay = $services.localization.render("reportchecktasks.table.done.$taskDone"))
-    |[[$taskDoc.title&gt;&gt;$result]]|[[$taskObj.task&gt;&gt;$result||anchor="$taskObj.rid"]]|$taskObj.creator|$taskObj.responsible|$taskObj.dueDate|$taskDoneDisplay
+    #set ($isCreator = $taskObj.getValue('creator').split(':')[1] == $xcontext.user)
+    #set ($isResponsible = $taskObj.getValue('responsible').contains($xcontext.user))
+    #if ($hasAdmin || $isCreator || $isResponsible)
+      #set ($taskDone = $taskObj.getValue('done') == 1)
+      #set ($taskDoneDisplay = $services.localization.render("reportchecktasks.table.done.$taskDone"))
+      |[[$taskDoc.title&gt;&gt;$result]]|[[$taskObj.task&gt;&gt;$result||anchor="$taskObj.rid"]]|$taskObj.creator|$taskObj.responsible|$taskObj.dueDate|$taskDoneDisplay
+    #end
   #end
 #end
-{{/velocity}}
-
-
-</content>
+{{/velocity}}</content>
   <object>
     <name>Macros.CheckboxedTask.WebHome</name>
     <number>0</number>
