@@ -90,8 +90,12 @@ reportchecktasks.table.emptyValue=ohne
 reportchecktasks.table.done=Erledigt
 reportchecktasks.table.page=Seite
 reportchecktasks.table.task=Aufgabe
+reportchecktasks.table.creator=Ersteller
 reportchecktasks.table.responsible=Verantwortlich
 reportchecktasks.table.dueDate=Fällig
+reportchecktasks.table.done.false=Offen
+reportchecktasks.table.done.true=Abgeschlosse
+
 
 TaskFlow.event.name=Aufgaben mit Kontrollkästchen
 TaskFlow.event.assign.description=Eine Aufgabe wurde zugewiesen

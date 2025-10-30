@@ -90,8 +90,11 @@ reportchecktasks.table.emptyValue=without
 reportchecktasks.table.done=Completed
 reportchecktasks.table.page=Page
 reportchecktasks.table.task=Task
+reportchecktasks.table.creator=Creator
 reportchecktasks.table.responsible=Responsible
 reportchecktasks.table.dueDate=Due date
+reportchecktasks.table.done.false=Open
+reportchecktasks.table.done.true=Completed
 
 TaskFlow.event.name=Checkboxed Tasks
 TaskFlow.event.assign.description=A task is assigned

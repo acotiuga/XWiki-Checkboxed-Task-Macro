@@ -41,12 +41,20 @@
 #set ($discard = $xwiki.jsfx.use('js/xwiki/table/tablefilterNsort.js', true))
 #set ($statement = 'from doc.object(Macros.CheckboxedTask.Code.TaskClass) task')
 #set ($results = $services.query.xwql($statement).addFilter('unique').execute())
+#set ($fields = ['page', 'task', 'creator', 'responsible', 'dueDate', 'done'])
+#set ($tableHeader = '')
+#foreach ($field in $fields)
+  #set ($translationKey = "reportchecktasks.table.$field")
+  #set ($tableHeader = "$tableHeader|=$services.localization.render($translationKey)")
+#end
 (% class="sortable filterable doOddEven" id="taskEntries" %)
-(% class="sortHeader" style="text-align:center;" %)|=Page|=Task|=Creator|=Responsible|=Due date
+(% class="sortHeader" style="text-align:center;" %)$tableHeader
 #foreach ($result in $results)
   #set ($taskDoc = $xwiki.getDocument($result))
   #foreach ($taskObj in $taskDoc.getObjects('Macros.CheckboxedTask.Code.TaskClass'))
-    |[[$taskDoc.title&gt;&gt;$result]]|[[$taskObj.task&gt;&gt;$result||anchor="$taskObj.rid"]]|$taskObj.creator|$taskObj.responsible|$taskObj.dueDate
+    #set ($taskDone = $taskObj.getValue('done') == 1)
+    #set ($taskDoneDisplay = $services.localization.render("reportchecktasks.table.done.$taskDone"))
+    |[[$taskDoc.title&gt;&gt;$result]]|[[$taskObj.task&gt;&gt;$result||anchor="$taskObj.rid"]]|$taskObj.creator|$taskObj.responsible|$taskObj.dueDate|$taskDoneDisplay
   #end
 #end
 {{/velocity}}
