@@ -24,27 +24,23 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.xwiki.contrib</groupId>
-    <artifactId>parent-platform</artifactId>
-    <version>15.10-3</version>
+    <artifactId>application-taskflow</artifactId>
+    <version>2.0-SNAPSHOT</version>
   </parent>
-  <artifactId>application-taskflow</artifactId>
-  <version>2.0-rc-2</version>
-  <name>Task Flow Application - Parent POM</name>
-  <packaging>pom</packaging>
-  <modules>
-    <module>application-taskflow-ui</module>
-    <module>application-taskflow-api</module>
-  </modules>
-  <scm>
-    <connection>scm:git:git://github.com/acotiuga/XWiki-Checkboxed-Task-Macro.git</connection>
-    <developerConnection>scm:git:git@github.com:acotiuga/XWiki-Checkboxed-Task-Macro.git</developerConnection>
-    <url>https://github.com/acotiuga/XWiki-Checkboxed-Task-Macro/tree/master/</url>
-    <tag>application-taskflow-2.0-rc-2</tag>
-  </scm>
-  <developers>
-    <developer>
-      <id>acotiuga</id>
-      <name>Alex Cotiugă</name>
-    </developer>
-  </developers>
+  <artifactId>application-taskflow-ui</artifactId>
+  <name>Task Flow Application - UI</name>
+  <description>An application for managing personal and delegated tasks with reminders, notifications, and task overview panels.</description>
+  <packaging>xar</packaging>
+  <properties>
+    <!-- Name to display by the Extension Manager -->
+    <xwiki.extension.name>Task Flow Application</xwiki.extension.name>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.xwiki.contrib</groupId>
+      <artifactId>application-taskflow-api</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
 </project>
