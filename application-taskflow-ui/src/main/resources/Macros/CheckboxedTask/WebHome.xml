@@ -776,7 +776,7 @@ td[data-title=🗹]{
 #set ($checked = '')
 #if ($done == 1)
   #set ($titleKey = 'reportchecktasks.macro.tooltip1')
-  #set ($checked = 'ckecked')
+  #set ($checked = 'checked')
 #end
 #set ($title = $services.localization.render($titleKey))
 #set ($hasDueDate = false)

@@ -152,7 +152,7 @@ public class TaskMacroProcessor
         if (taskObj == null) {
             taskObj = doc.newXObject(taskClassRef, context);
             taskObj.setStringValue(RID, rid);
-            taskObj.setIntValue("done", 1);
+            taskObj.setIntValue("done", 0);
             taskObj.setLargeStringValue("creator", taskCreator);
         }
         return taskObj;
