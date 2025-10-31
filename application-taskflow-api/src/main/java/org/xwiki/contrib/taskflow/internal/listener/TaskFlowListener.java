@@ -139,7 +139,7 @@ public class TaskFlowListener implements EventListener
         List<MacroBlock> macros = xdom.getBlocks(new MacroBlockMatcher("checktask"), Block.Axes.DESCENDANT);
 
         Set<String> foundRids = new HashSet<>();
-        String dateFormat = context.getWiki().getXWikiPreference("dateformat", "dd/MM/yyyy HH:mm" , context);
+        String dateFormat = context.getWiki().getXWikiPreference("dateformat", "dd/MM/yyyy HH:mm", context);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
 
         for (MacroBlock macro : macros) {
