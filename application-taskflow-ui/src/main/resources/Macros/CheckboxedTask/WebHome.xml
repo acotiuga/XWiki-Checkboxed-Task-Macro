@@ -761,10 +761,6 @@ td[data-title=🗹]{
 #end
 #if ($xcontext.macro.params.dueDate)
   #set ($dueDate = "$!xcontext.macro.params.dueDate")
-  ## Now format the due date to be printed in a readable and reasonable manner.
-  #set ($formatter = $xwiki.jodatime.getDateTimeFormatterForPattern($services.localization.render('checktask.macro.dateFormat')))
-  #set ($dueDate = $datetool.toDate($xwiki.getXWikiPreference('dateformat','yyyy/MM/dd HH:mm'), $dueDate))
-  #set ($dueDate = $formatter.print($dueDate))
 #end
 #if ($xcontext.macro.params.responsible)
   #set ($responsible = "$!xcontext.macro.params.responsible")

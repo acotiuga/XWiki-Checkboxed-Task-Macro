@@ -86,7 +86,7 @@
       <hint/>
       <name>done</name>
       <number>1</number>
-      <prettyName>done</prettyName>
+      <prettyName>Done</prettyName>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
       <validationRegExp/>
@@ -94,14 +94,14 @@
     </done>
     <dueDate>
       <customDisplay/>
-      <dateFormat>yyyy/MM/dd HH:mm</dateFormat>
+      <dateFormat>dd/MM/yyyy HH:mm</dateFormat>
       <disabled>0</disabled>
       <emptyIsToday>0</emptyIsToday>
       <hint/>
       <name>dueDate</name>
       <number>3</number>
       <picker>1</picker>
-      <prettyName>dueDate</prettyName>
+      <prettyName>Due date</prettyName>
       <size>20</size>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
@@ -117,7 +117,7 @@
       <hint/>
       <name>protected</name>
       <number>6</number>
-      <prettyName>protected</prettyName>
+      <prettyName>Protected</prettyName>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
       <validationRegExp/>
@@ -180,7 +180,7 @@
       <name>rid</name>
       <number>5</number>
       <picker>1</picker>
-      <prettyName>rid</prettyName>
+      <prettyName>Rid</prettyName>
       <size>30</size>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
@@ -194,7 +194,7 @@
       <name>task</name>
       <number>2</number>
       <picker>1</picker>
-      <prettyName>task</prettyName>
+      <prettyName>Task</prettyName>
       <size>30</size>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>

@@ -96,7 +96,6 @@ reportchecktasks.table.dueDate=Fällig
 reportchecktasks.table.done.false=Offen
 reportchecktasks.table.done.true=Abgeschlosse
 
-
 TaskFlow.event.name=Aufgaben mit Kontrollkästchen
 TaskFlow.event.assign.description=Eine Aufgabe wurde zugewiesen
 TaskFlow.event.expiring.description=Eine Aufgabe muss erledigt werden

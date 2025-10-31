@@ -195,7 +195,7 @@
   #end
 #end
 #foreach ($entry in $myDisplayedTasksMap.entrySet())
-  $datetool.format('yyyy/MM/dd', $entry.key) - $entry.value
+  $xwiki.formatDate($entry.key) - $entry.value
 #end
 [[$services.localization.render('checktask.macro.panel.myTasks.allTasks.label')&gt;&gt;Macros.CheckboxedTask.WebHome]]
 #panelfooter()
