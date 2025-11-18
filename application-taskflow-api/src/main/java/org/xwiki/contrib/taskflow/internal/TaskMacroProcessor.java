@@ -116,21 +116,25 @@ public class TaskMacroProcessor
         taskObj = getOrCreateTaskObject(doc, taskClassRef, rid, taskCreator, context);
 
         Date macroDueDate = parseDueDate(params.getOrDefault(DUE_DATE, ""), simpleDateFormat);
-        String taskContent = macro.getContent();
-        String responsible = params.getOrDefault(RESPONSIBLE, "");
-        List<DocumentReference> responsibleUsers = Arrays
-            .stream(responsible.split(SEPARATOR))
-            .map(String::trim)
-            .filter(s -> !s.isEmpty())
-            .map(resolver::resolve)
-            .collect(Collectors.toList());
+        if (macroDueDate != null) {
+            taskObj.setDateValue(DUE_DATE, macroDueDate);
+        }
 
-        taskObj.setDateValue(DUE_DATE, macroDueDate);
-        taskObj.setStringListValue(REMINDER_TIMES, List.of(params.getOrDefault(REMINDER_TIMES, "").split(SEPARATOR)));
-        taskObj.setStringValue("task", macro.getContent());
+        String taskContent = macro.getContent();
+        taskObj.setStringValue("task", taskContent);
+
+        String responsible = params.getOrDefault(RESPONSIBLE, "");
         taskObj.setLargeStringValue(RESPONSIBLE, responsible);
 
+        taskObj.setStringListValue(REMINDER_TIMES, List.of(params.getOrDefault(REMINDER_TIMES, "").split(SEPARATOR)));
+
         if (sendNotification) {
+            List<DocumentReference> responsibleUsers = Arrays
+                .stream(responsible.split(SEPARATOR))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(resolver::resolve)
+                .collect(Collectors.toList());
             notifyUsers(doc, rid, taskContent, taskCreator, responsibleUsers, context);
         }
     }
