@@ -176,6 +176,7 @@
     <property>
       <content>{{velocity}}
 #panelheader($services.localization.render('checktask.macro.panel.myTasks.name'))
+#set ($discard = $xwiki.ssx.use('Macros.CheckboxedTask.Code.MyTasksPanel'))
 #set ($statement = 'from doc.object(Macros.CheckboxedTask.Code.TaskClass) task')
 #set ($results = $services.query.xwql($statement).addFilter('unique').execute())
 #set ($myTasksMap = $collectiontool.sortedMap)
@@ -183,19 +184,27 @@
   #set ($taskDoc = $xwiki.getDocument($result))
   #set ($taskObjects = $taskDoc.getObjects('Macros.CheckboxedTask.Code.TaskClass'))
   #foreach ($taskObj in $taskObjects)
-    #if ($taskObj.getValue('responsible').contains($xcontext.user) &amp;&amp; "$!taskObj.getValue('dueDate')" != '')
+    #if ($taskObj.getValue('responsible').contains($xcontext.user) &amp;&amp; "$!taskObj.getValue('dueDate')" != '' &amp;&amp; $taskObj.getValue('done') == 0)
       #set ($discard = $myTasksMap.put($taskObj.getValue('dueDate'), $taskObj.getValue('task')))
     #end
   #end
 #end
-#set ($myDisplayedTasksMap = {})
-#foreach ($entry in $myTasksMap.entrySet())
-  #if ($myDisplayedTasksMap.size() &lt; 2 &amp;&amp; $datetool.date.compareTo($entry.key) != 1)
+#set ($myDisplayedTasksMap = $collectiontool.sortedMap)
+#foreach ($entry in $myTasksMap.descendingMap().entrySet())
+  #if ($myDisplayedTasksMap.size() &lt; 5)
     #set ($discard = $myDisplayedTasksMap.put($entry.key, $entry.value))
   #end
 #end
 #foreach ($entry in $myDisplayedTasksMap.entrySet())
-  $xwiki.formatDate($entry.key) - $entry.value
+  #set ($taskContent = $entry.value)
+  #if ($taskContent.length() &gt; 45)
+    #set ($taskContent = "$taskContent.substring(0, 45) ...")
+  #end
+  #set ($cssClass = '')
+  #if ($datetool.date.compareTo($entry.key) &gt; 0)
+    #set ($cssClass = "class='expired-dueDate'")
+  #end
+  (% $cssClass %)((($xwiki.formatDate($entry.key) - $taskContent)))
 #end
 [[$services.localization.render('checktask.macro.panel.myTasks.allTasks.label')&gt;&gt;Macros.CheckboxedTask.WebHome]]
 #panelfooter()
@@ -209,6 +218,129 @@
     </property>
     <property>
       <type>view</type>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.Code.MyTasksPanel</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>088865e6-b83f-40ff-8d55-07dab0970927</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <defaultValue>long</defaultValue>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <restricted>0</restricted>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>.expired-dueDate {
+  color: @brand-danger;
+}</code>
+    </property>
+    <property>
+      <contentType>LESS</contentType>
+    </property>
+    <property>
+      <name/>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
     </property>
   </object>
 </xwikidoc>
